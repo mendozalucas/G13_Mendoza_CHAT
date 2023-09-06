@@ -1,0 +1,74 @@
+<html>
+<head>
+<title> Wordle </title>
+<meta charset="UTF-8">
+ <script src="/js/Wordle.js"></script>
+ <script src="/js/dom.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale =0, user-scalable=no">
+<link rel="stylesheet" href="/css/Wordle.css">
+
+</head>
+
+<body>
+<h1 id="title">Wordle con Rivas</h1>
+<h2>Bienvenido {{fullname}}</h2>
+<main class="main-container">               
+        <form action="/verificar_palabra" method="POST" id="form_palabra">
+                <div class="row" id="fila_1">
+                        <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_1" name="cubo_1" autofocus>
+                        <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_2" name="cubo_2"> 
+                        <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_3" name="cubo_3"> 
+                        <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_4" name="cubo_4"> 
+                        <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_5" name="cubo_5">  
+                        <button style=" width: 60px; height: 60px;" class="Cuadrado verde fa fa-check" onclick="palabras('0')" ></button> 
+                </div>  
+        </form> 
+        <form action="/verificar_palabra" method="POST" id="form_palabra">   
+                 <div class="row" id="fila_2">
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_6">
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_7"> 
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_8"> 
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_9"> 
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_10">  
+                         <button style=" width: 60px; height: 60px;" class="Cuadrado verde fa fa-check" onclick="palabras('5')" ></button> 
+                </div>
+        </form>
+        <form action="/verificar_palabra" method="POST" id="form_palabra">   
+                <div class="row" id="fila_3">
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_11">
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_12"> 
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_13"> 
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_14"> 
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_15">  
+                         <button style=" width: 60px; height: 60px;" class="Cuadrado verde fa fa-check" onclick="palabras('10')" ></i></button> 
+                </div>
+        </form>
+        <form action="/verificar_palabra" method="POST" id="form_palabra">   
+                <div class="row" id="fila_4">
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_16">
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_17"> 
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_18"> 
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_19"> 
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_20">  
+                         <button style=" width: 60px; height: 60px;" class="Cuadrado verde fa fa-check" onclick="palabras('15')" ></i></button> 
+                </div>
+                </form>
+         <form action="/verificar_palabra" method="POST" id="form_palabra">   
+                <div class="row" id="fila_5">
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_21">
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_22"> 
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_23"> 
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_24"> 
+                         <input style=" width: 60px; height: 60px;"  class="Cuadrado gris" maxlength="1" id="cubo_25">  
+                         <button style=" width: 60px; height: 60px;" class="Cuadrado verde fa fa-check" onclick="palabras('20')" ></i></button> 
+                </div>
+        </form>
+        <div id="resultado"></div>
+        <div class="links"> <a href="#"></a> <a href="/reiniciar_juego">Reiniciar Juego</a> </div> 
+        </div> 
+        </main>
+</body>
+
+</html>
+
+
