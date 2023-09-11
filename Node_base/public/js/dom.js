@@ -1,10 +1,9 @@
-/*
+
 //Esta funcion la llama el boton Ingresar que tiene que ser type button para ejecutar el onclick
  function login() {
   //Leo los datos del input
   console.log("LOGIN");
-  console.log("EN EL DOM palabra incognita 2: "+palabra_incognita)
-  let usuario = document.getElementById("usuario_login").value;
+  let usuario = document.getElementById("email").value;
   let contraseña = document.getElementById("password").value;
 
   //Creo un objeto de forma instantanea
@@ -17,17 +16,9 @@
   putJSON(data)
 }
 
-function elUsuarioExiste(){
-    let div_usersExist = document.getElementById("yaExiste")
-
-    div_usersExist.innerHTML = `
-    <h2 > El usuario ya existe </h2>
-    ` 
-}
-
 function intentarOtraVez(){
     let div_intentarAgain = document.getElementById("nuevoIntento")
-    document.getElementById("usuario_login").value=""
+    document.getElementById("email").value=""
     document.getElementById("password").value=""
     div_intentarAgain.innerHTML = `
     <h2> El usuario o la contraseña son INCORRECTAS</h2>
@@ -61,4 +52,7 @@ async function putJSON(data) {
       console.error("Error:", error);
     }
   }
-*/
+function logOut(){
+    req.session.destroy();
+    console.log("El usuario a cerrado sesion correctamente");
+}

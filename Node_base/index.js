@@ -1,5 +1,6 @@
 const express = require("express");
 const exphbs = require("express-handlebars");
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const MySQL = require('./modulos/mysql');
 const { initializeApp } = require("firebase/app");
@@ -12,7 +13,7 @@ const {
   GoogleAuthProvider,
 } = require("firebase/auth");
 
-
+let id_contacto = 0
 const app = express();
 app.use(express.static('/Node_base/public/js/Wordle.js'));
 
@@ -33,12 +34,14 @@ app.listen(Listen_Port, function() {
 
 // Configuración de Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyA936j4rOJbIGAiPMENWJAMbIAeCULI8J8",
-  authDomain: "infothebest-3b261.firebaseapp.com",
-  projectId: "infothebest-3b261",
-  storageBucket: "infothebest-3b261.appspot.com",
-  messagingSenderId: "125429100089",
-  appId: "1:125429100089:web:707f20f776e39a3d8367e8",
+  apiKey: "AIzaSyAihQBOk71Jma1BSF61yDYhITp46j-kbmI",
+  authDomain: "chat-73d0e.firebaseapp.com",
+  databaseURL: "https://chat-73d0e-default-rtdb.firebaseio.com",
+  projectId: "chat-73d0e",
+  storageBucket: "chat-73d0e.appspot.com",
+  messagingSenderId: "302833650986",
+  appId: "1:302833650986:web:a799cfe276ca10d6756253",
+  measurementId: "G-JWCD1WPE10"
 };
 
 const appFirebase = initializeApp(firebaseConfig);
@@ -46,6 +49,8 @@ const auth = getAuth(appFirebase);
 
 // Importar AuthService
 const authService = require("./authService");
+app.use(session({secret: '123456', resave: true, saveUninitialized: true}));
+
 
 app.get("/", (req, res) => {
   res.render("login");
@@ -57,10 +62,13 @@ app.get("/register", (req, res) => {
 
 app.post("/register", async (req, res) => {
   const { email, password } = req.body;
-
   try {
     await authService.registerUser(auth, { email, password });
-    res.render("register", {
+    id_contacto = id_contacto + 1
+    MySQL.realizarQuery(`
+        INSERT INTO MC_contactos (id_contacto, user_contacto, password_contacto )
+        VALUES ("${id_contacto}", "${email}", "${password}"); `)
+    res.render("login", {
       message: "Registro exitoso. Puedes iniciar sesión ahora.",
     });
   } catch (error) {
@@ -83,8 +91,9 @@ app.post("/login", async (req, res) => {
       email,
       password,
     });
+    req.session.Dato = req.body.email;
     // Aquí puedes redirigir al usuario a la página que desees después del inicio de sesión exitoso
-    res.redirect("/menu");
+    res.redirect("/menu"); //como verificar la variable req.session en la pagina //////////////////////////////////////
   } catch (error) {
     console.error("Error en el inicio de sesión:", error);
     res.render("login", {
@@ -99,3 +108,4 @@ app.get("/menu", (req, res) => {
 });
 
 /************************************** */
+// como realizar el push de datos al my sql /////////////////////////////////////////////////////////////////////
