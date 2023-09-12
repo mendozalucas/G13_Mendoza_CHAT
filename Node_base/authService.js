@@ -14,7 +14,10 @@ const registerUser = async (auth, { email, password }) => {
       password
     );
     await sendEmailVerification(auth.currentUser);
-    console.log("Verification email sent!");
+    console.log("Verification email sent! ");//, userCredential);
+    /*
+    console.log("Usuario actual " , auth.currentUser)
+    console.log("Id actual ", userCredential.UserCredentialImpl) */
   } catch (error) {
     console.error("Error registering user:", error);
     throw error;

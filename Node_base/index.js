@@ -65,7 +65,7 @@ app.post("/register", async (req, res) => {
   try {
     await authService.registerUser(auth, { email, password });
     id_contacto = id_contacto + 1
-    MySQL.realizarQuery(`
+    await MySQL.realizarQuery(`
         INSERT INTO MC_contactos (id_contacto, user_contacto, password_contacto )
         VALUES ("${id_contacto}", "${email}", "${password}"); `)
     res.render("login", {
@@ -93,7 +93,7 @@ app.post("/login", async (req, res) => {
     });
     req.session.Dato = req.body.email;
     // Aquí puedes redirigir al usuario a la página que desees después del inicio de sesión exitoso
-    res.redirect("/menu"); //como verificar la variable req.session en la pagina //////////////////////////////////////
+    res.redirect("/menu");
   } catch (error) {
     console.error("Error en el inicio de sesión:", error);
     res.render("login", {
@@ -104,8 +104,14 @@ app.post("/login", async (req, res) => {
 
 app.get("/menu", (req, res) => {
   // Agrega aquí la lógica para mostrar la página del menu
+  console.log("Email logueado: " , req.session.Dato)
   res.render("menu");
 });
 
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  console.log("sesion destruida")
+  res.render("login");
+});
+
 /************************************** */
-// como realizar el push de datos al my sql /////////////////////////////////////////////////////////////////////
