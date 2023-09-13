@@ -105,7 +105,7 @@ app.post("/login", async (req, res) => {
 app.get("/menu", (req, res) => {
   // Agrega aquí la lógica para mostrar la página del menu
   console.log("Email logueado: " , req.session.Dato)
-  res.render("menu");
+  res.render("chat");
 });
 
 app.get("/logout", (req, res) => {
@@ -114,8 +114,27 @@ app.get("/logout", (req, res) => {
   res.render("login");
 });
 
-app.get("/chats", (req,res) => {
-  res.render("chat");
+app.post("/newchat", async function(req,res) {
+  
+  let verificarMail = req.body.verficar_mail
+  console.log("a", verificarMail)
+  let verificacion = await MySQL.realizarQuery(`SELECT * FROM MC_contactos WHERE user_contacto = "${verificarMail}"`)
+  let existe = false
+  console.log("b", verificacion)
+  for (let k = 0; k < verificacion.length; k++) {
+    if (verificarMail = verificacion[k].user_contacto ) {
+      existe = true
+    }
+  }
+  if (existe == false){
+
+    console.log("El usuario no existe")
+    res.render('chat', {aviso_chat: "El email que haz ingresado no existe"});
+    
+  }else if (existe == true){
+    console.log("El usuario existe!, puedes comenzar el chat")
+    res.render('chat', {aviso_chat: "El email que haz ingresado existe, falta el innerhtml para comenzar el chat"});
+  }
 
 });
 /************************************** */
