@@ -114,4 +114,8 @@ app.get("/logout", (req, res) => {
   res.render("login");
 });
 
+app.get("/chats", (req,res) => {
+  res.render("chat");
+
+});
 /************************************** */

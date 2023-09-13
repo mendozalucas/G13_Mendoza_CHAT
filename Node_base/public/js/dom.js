@@ -52,7 +52,13 @@ async function putJSON(data) {
       console.error("Error:", error);
     }
   }
-function logOut(){
-    req.session.destroy();
-    console.log("El usuario a cerrado sesion correctamente");
-}
+
+function changeRegister() {
+    const registed = document.getElementById("new_contact");
+    if(registed.style.display !== "none") {
+        registed.style.display = "none";
+    }
+    else {
+        registed.style.display = "";
+    }
+} 
