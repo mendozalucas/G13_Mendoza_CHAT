@@ -63,6 +63,47 @@ function changeRegister() {
     }
 } 
 
+
+function verifyEmail() {
+  //Leo los datos del input
+  console.log("verificarmail");
+  let email_ = document.getElementById("verificar_mail").value;
+
+  //Creo un objeto de forma instantanea
+  let data = {
+      user: email_
+  }
+
+  //data es el objeto que le paso al back
+  putJSON(data)
+}
+
+async function putJSON(data) {
+
+    try {
+      const response = await fetch("/newchat", {
+        method: "POST", // or 'POST'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      
+      //En result obtengo la respuesta
+      const result = await response.json();
+      console.log("Success:", result);
+
+      if (result.validar == false) {
+        console.log("Intente de nuevo")
+      } else {
+        document.getElementById("nuevochat").submit()
+      }
+
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
 async function adminUsuarios(){
   try {
     const response = await fetch("/verifyEmail", {
