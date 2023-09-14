@@ -22,17 +22,17 @@
                         <div id="new_contact" style="display: none;">
                             <div class="col-auto shadow p-3 mb-5 bg-white rounded">
                                     <h4>Crear chat</h4>
-                                    <form action="/newchat" method="post" class="container-sm"> 
+                                    <form action="/verifyEmail" method="post" class="container-sm" id="nuevochat"> 
                                         <div class="form-group">
                                             <label for="dni">Su email</label>
-                                            <input class="form-control" type="text" id="dni_register" name="verificar_mail">
+                                            <input class="form-control" type="text" id="verificar_mail" name="verificar_mail" onclick="verifyEmail()">
                                         </div>
                                         <div class="form-group">
                                             <label for="nombre">Apodo que le quieres poner</label>
                                             <input class="form-control" type="text" id="apodo" name="apodo">
                                         </div>
                                         <div class="form-group">                  
-                                            <button type="submit" class="form-check-control btn btn-success">Crear chat</button>
+                                            <button type="submit" class="form-check-control btn btn-success" onclick="adminUsuarios()">Crear chat</button>
                                         </div>
                                     </form>
                                 </div>

@@ -114,9 +114,30 @@ app.get("/logout", (req, res) => {
   res.render("login");
 });
 
-app.post("/newchat", async function(req,res) {
-  
+
+app.put('/verifyEmail', async function(req, res) {
+  //Petición PUT con URL = "/login"
   let verificarMail = req.body.verficar_mail
+
+  console.log("Soy un pedido PUT", req.body); //En req.body vamos a obtener el objeto con los parámetros enviados desde el frontend por método PUT
+  //Consulto en la bdd de la existencia del usuario
+  let verificacion = await MySQL.realizarQuery(`SELECT * FROM MC_contactos WHERE user_contacto = "${verificarMail}"`)
+  //Chequeo el largo del vector a ver si tiene datos
+  if (verificacion.length > 0) {
+      //Armo un objeto para responder
+      console.log("true");
+      res.send({validar: true})    
+  }
+  else{
+      console.log("false");
+      res.send({validar:false})    
+  }
+    
+});
+
+app.post("/verifyEmail", async function(req,res) {
+  
+  let verificarMail = req.body.verificar_mail
   console.log("a", verificarMail)
   let verificacion = await MySQL.realizarQuery(`SELECT * FROM MC_contactos WHERE user_contacto = "${verificarMail}"`)
   let existe = false
@@ -137,4 +158,6 @@ app.post("/newchat", async function(req,res) {
   }
 
 });
+
+
 /************************************** */
