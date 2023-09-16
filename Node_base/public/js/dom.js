@@ -62,7 +62,7 @@ function changeRegister() {
         registed.style.display = "";
     }
 } 
-
+/*
 
 function verifyEmail() {
   //Leo los datos del input
@@ -75,13 +75,13 @@ function verifyEmail() {
   }
 
   //data es el objeto que le paso al back
-  putJSON(data)
+  putJSON_2(data)
 }
 
-async function putJSON(data) {
+async function putJSON_2(data) {
 
     try {
-      const response = await fetch("/newchat", {
+      const response = await fetch("/verifyEmail", {
         method: "POST", // or 'POST'
         headers: {
           "Content-Type": "application/json",
@@ -103,10 +103,10 @@ async function putJSON(data) {
       console.error("Error:", error);
     }
   }
-
+*/
 async function adminUsuarios(){
   try {
-    const response = await fetch("/verifyEmail", {
+    const response = await fetch("/verify_Email", {
       method: "PUT", // or 'POST'
       headers: {
         "Content-Type": "application/json",
@@ -119,58 +119,51 @@ async function adminUsuarios(){
     console.log("Success:", result);
 
     if (result.validar == false) {
-      console.error("Error:", error);
+      console.log("holae");
+      console.error("A:Error:", error);
     } 
     else {
+      console.log("hola");
       /* recorrer respuesta y armar la tabla  */
       listarUsuarios(result.respuesta.verificacion);
       //document.getElementById("form_login").submit()
     }
 
   } catch (error) {
-    console.error("Error:", error);
+    console.error("B:Error:", error);
   }
 }
 
 function listarUsuarios(verificacion) {
-  const tablaUsuarios = document.getElementById("tablaAdmin");
+  const tablaChats = document.getElementById("tabla_chat");
   let listar_var = "";
-  if(tablaUsuarios.style.display !== "none") {
-    tablaUsuarios.innerHTML = "";
+  if(tablaChats.style.display !== "none") {
+    tablaChats.innerHTML = "";
   }
   else {
-    tablaUsuarios.style.display = "";
+    tablaChats.style.display = "";
   }
   listar_var += `
-      <div><br><h3> Administracion de Usuarios </h3><br></div>
-      <table class="table">
-          <thead class="thead-dark">
-              <tr></tr>
-              <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">USUARIO</th>
-                  <th scope="col">MAIL</th>
-                  <th scope="col"></th>
-                  <th scope="col"></th>
-              </tr>
-          </thead> 
-      <tbody>`
-  console.log(usuarios.length);  
-  for (let u = 0; u < usuarios.length; u++) {
-      listar_var +=` 
-          <tr>
-              <th scope="row">${usuarios[u].id}</th>
-              <td>${usuarios[u].usuario}</td>
-              <td>${usuarios[u].gmail}</td>
-              <td><button class="btn btn-danger" onclick="deleteUsuario(${usuarios[u].id})"><i class="fa fa-trash" ></i></button>
-              <td><button class="form-check-control btn btn-success" onclick="getPuntajes(${usuarios[u].id},'${usuarios[u].usuario}')">Puntajes</i></button>
-              </td>
-          </tr>`
-  }
-  listar_var +=`
-  </tbody>
-  </table>`
-  tablaUsuarios.innerHTML = listar_var;
+  <div class="card">
+    <div class="card-body">
+
+        <ul class="list-unstyled mb-0">
+            <li class="p-2 border-bottom" style="background-color: #eee;">
+                <a href="#!" class="d-flex justify-content-between">
+                <div class="d-flex flex-row">
+                    <div class="pt-1">
+                    <p>jaja</p>
+                    <p class="fw-bold mb-0">${verificacion[0].user_contacto}</p>
+                    </div>
+                </div>
+                </a>
+            </li>
+        </ul>
+
+    </div>
+  </div>
+      `
+  tablaChats.innerHTML = listar_var;
 }
 /*
 function verifyEmail() {

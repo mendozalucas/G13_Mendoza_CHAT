@@ -93,7 +93,7 @@ app.post("/login", async (req, res) => {
     });
     req.session.Dato = req.body.email;
     // Aquí puedes redirigir al usuario a la página que desees después del inicio de sesión exitoso
-    res.redirect("/menu");
+    res.redirect("/chat");
   } catch (error) {
     console.error("Error en el inicio de sesión:", error);
     res.render("login", {
@@ -102,7 +102,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/menu", (req, res) => {
+app.get("/chat", (req, res) => {
   // Agrega aquí la lógica para mostrar la página del menu
   console.log("Email logueado: " , req.session.Dato)
   res.render("chat");
@@ -115,18 +115,18 @@ app.get("/logout", (req, res) => {
 });
 
 
-app.put('/verifyEmail', async function(req, res) {
+app.put('/verify_Email', async function(req, res) {
   //Petición PUT con URL = "/login"
-  let verificarMail = req.body.verficar_mail
-
+  let verificarMail = req.body.verificar_mail
+  console.log("ayuda", verificarMail)
   console.log("Soy un pedido PUT", req.body); //En req.body vamos a obtener el objeto con los parámetros enviados desde el frontend por método PUT
   //Consulto en la bdd de la existencia del usuario
-  let verificacion = await MySQL.realizarQuery(`SELECT * FROM MC_contactos WHERE user_contacto = "${verificarMail}"`)
+  let verificacion = await MySQL.realizarQuery(`SELECT user_contacto FROM MC_contactos WHERE user_contacto = "${verificarMail}"`)
   //Chequeo el largo del vector a ver si tiene datos
-  if (verificacion.length > 0) {
+  if (verificacion.length >= 0) {
       //Armo un objeto para responder
       console.log("true");
-      res.send({validar: true})    
+      res.send({validar: true, respuesta: {verificacion}})    
   }
   else{
       console.log("false");
@@ -135,11 +135,12 @@ app.put('/verifyEmail', async function(req, res) {
     
 });
 
-app.post("/verifyEmail", async function(req,res) {
+/*
+app.post("/verify_Email", async function(req,res) {
   
   let verificarMail = req.body.verificar_mail
   console.log("a", verificarMail)
-  let verificacion = await MySQL.realizarQuery(`SELECT * FROM MC_contactos WHERE user_contacto = "${verificarMail}"`)
+  let verificacion = await MySQL.realizarQuery(`SELECT user_contacto FROM MC_contactos WHERE user_contacto = "${verificarMail}"`)
   let existe = false
   console.log("b", verificacion)
   for (let k = 0; k < verificacion.length; k++) {
