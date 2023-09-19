@@ -129,6 +129,7 @@ async function adminUsuarios(data){
     //En result obtengo la respuesta
     const result = await response.json();
     console.log("Success:", result);
+      console.log(result);
 
     if (result.validar == false) {
       console.log("holae");
@@ -137,7 +138,7 @@ async function adminUsuarios(data){
     else {
       console.log("hola");
       /* recorrer respuesta y armar la tabla  */
-      listarUsuarios(result.respuesta.verificacion);
+      listarUsuarios(result.respuesta[0].user_contacto);
       //document.getElementById("form_login").submit()
     }
 
@@ -146,8 +147,9 @@ async function adminUsuarios(data){
   }
 }
 
-function listarUsuarios(verificacion) {
+function listarUsuarios(user) {
   const tablaChats = document.getElementById("tabla_chat");
+  let i = 1
   let listar_var = "";
   if(tablaChats.style.display !== "none") {
     tablaChats.innerHTML = "";
@@ -156,27 +158,64 @@ function listarUsuarios(verificacion) {
     tablaChats.style.display = "";
   }
   listar_var += `
-  <div class="card">
-    <div class="card-body">
+    <div class="card">
+      <div class="card-body">
 
-        <ul class="list-unstyled mb-0">
-            <li class="p-2 border-bottom" style="background-color: #eee;">
-                <a href="#!" class="d-flex justify-content-between">
-                <div class="d-flex flex-row">
-                    <div class="pt-1">
-                    <p>jaja</p>
-                    <p class="fw-bold mb-0">${verificacion[0].user_contacto}</p>
-                    </div>
-                </div>
-                </a>
-            </li>
-        </ul>
+          <ul class="list-unstyled mb-0">
+              <li class="p-2 border-bottom" style="background-color: #eee;">
+                  <a href="#!" class="d-flex justify-content-between">
+                  <div class="d-flex flex-row">
+                      <div class="pt-1">
+                      <button class="fw-bold mb-0" onclick="cambiarChat()">${user}</button>
+                      </div>
+                  </div>
+                  </a>
+              </li>
+          </ul>
 
-    </div>
+      </div>
+  </div>
+  
+  <div class="col-md-6 col-lg-7 col-xl-8" id="display_chat" style="display: none;">
+            
+    <ul class="list-unstyled">
+      <li class="d-flex justify-content-between mb-4">
+        <div class="card w-100">
+            <div class="card-header d-flex justify-content-between p-3">
+                <p class="fw-bold mb-0">Lara Croft</p>
+                <p class="text-muted small mb-0"><i class="far fa-clock"></i> 13 mins ago</p>
+            </div>
+            <div class="card-body">
+                <p class="mb-0">
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                laudantium.
+                </p>
+            </div>
+        </div>
+      </li>
+      <li class="bg-white mb-3">
+        <div class="form-outline">
+          <input type="text" for="textAreaExample2">Message</input>
+        </div>
+      </li>
+      <button type="button" class="btn btn-info btn-rounded float-end">Send</button>
+    <ul>
   </div>
       `
+  i = i + 1
   tablaChats.innerHTML = listar_var;
 }
+
+function cambiarChat() {
+  let n = 1
+  const registed = document.getElementById("display_chat");
+  if(registed.style.display !== "none") {
+      registed.style.display = "none";
+  }
+  else {
+      registed.style.display = "";
+  }
+} 
 /*
 async function adminUsuarioss(){
   try {

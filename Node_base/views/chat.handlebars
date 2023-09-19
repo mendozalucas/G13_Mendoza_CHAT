@@ -32,15 +32,11 @@
                                             <input class="form-control" type="text" id="apodo" name="apodo">
                                         </div>
                                         <div class="form-group">                  
-                                            <button class="form-check-control btn btn-success" onclick="fetcheado()">Crear chat</button>
+                                            <button type="button" class="form-check-control btn btn-success" onclick="fetcheado()">Crear chat</button>
                                         </div>
                                     </form>
                                 </div>
-                                    <table class="table">
-                                        <div id="tabla_chat" style="display: none">
-                                            
-                                        </div>    
-                                    </table>
+                                    
                         </div>
                     </div>
                     <h4>{{aviso_chat}}</h4>
@@ -53,7 +49,13 @@
                 </body>
                 <h5 class="font-weight-bold mb-3 text-center text-lg-start">Member</h5>
 
-                <div class="card">
+                <table class="table">
+                    <div id="tabla_chat" style="display: none">
+                                            
+                    </div>    
+                </table>
+
+                <div class="card">  
                     <div class="card-body">
 
                         <ul class="list-unstyled mb-0">
@@ -80,37 +82,22 @@
 
             </div>
 
-            <div class="col-md-6 col-lg-7 col-xl-8">
+            <div class="col-md-6 col-lg-12 col-xl-8">
             
                 <ul class="list-unstyled">
-                <li class="d-flex justify-content-between mb-4">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
-                    class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
-                    <div class="card">
-                    <div class="card-header d-flex justify-content-between p-3">
-                        <p class="fw-bold mb-0">Brad Pitt</p>
-                        <p class="text-muted small mb-0"><i class="far fa-clock"></i> 12 mins ago</p>
-                    </div>
-                    <div class="card-body">
-                        <p class="mb-0">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.
-                        </p>
-                    </div>
-                    </div>
-                </li>
+                
                 <li class="d-flex justify-content-between mb-4">
                     <div class="card w-100">
-                    <div class="card-header d-flex justify-content-between p-3">
-                        <p class="fw-bold mb-0">Lara Croft</p>
-                        <p class="text-muted small mb-0"><i class="far fa-clock"></i> 13 mins ago</p>
-                    </div>
-                    <div class="card-body">
-                        <p class="mb-0">
-                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                        laudantium.
-                        </p>
-                    </div>
+                        <div class="card-header d-flex justify-content-between p-3">
+                            <p class="fw-bold mb-0">Lara Croft</p>
+                            <p class="text-muted small mb-0"><i class="far fa-clock"></i> 13 mins ago</p>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0">
+                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                            laudantium.
+                            </p>
+                        </div>
                     </div>
                     <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
                     class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">

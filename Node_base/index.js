@@ -117,18 +117,16 @@ app.get("/logout", (req, res) => {
 
 app.put('/verify_Email', async function(req, res) {
   //Petición PUT con URL = "/login"
-  let verificarMail = req.body
-  
-  console.log("ayuda", verificarMail)
+  let verificarMail = req.body.mail
   console.log("Soy un pedido PUT /verify_Email", req.body); //En req.body vamos a obtener el objeto con los parámetros enviados desde el frontend por método PUT
   //Consulto en la bdd de la existencia del usuario
-  let verificacion = await MySQL.realizarQuery(`SELECT user_contacto FROM MC_contactos WHERE user_contacto = "mrivas@pioix.edu.ar"`)
+  let verificacion = await MySQL.realizarQuery(`SELECT user_contacto FROM MC_contactos WHERE user_contacto = "${verificarMail}"`)
   //Chequeo el largo del vector a ver si tiene datos "${verificarMail}"
   console.log("verificacion", verificacion)
   if (verificacion.length > 0) {
       //Armo un objeto para responder
       console.log("true_put");
-      res.send({validar: true, respuesta: {verificacion}})    
+      res.send({validar: true, respuesta: verificacion})    
   }
   else{
       console.log("false_put");
