@@ -28,10 +28,24 @@ app.set('view engine', 'handlebars'); //Inicializo Handlebars
 
 const Listen_Port = 3000; //Puerto por el que estoy ejecutando la página Web
 
-app.listen(Listen_Port, function() {
+const server = app.listen(Listen_Port, function() {
     console.log('Servidor NodeJS corriendo en http://localhost:' + Listen_Port + '/');
 });
 
+const io = require('socket.io')(server);
+/*
+const sessionMiddleware = session({
+    secret: 'sararasthastka',
+    resave: true,
+    saveUnintialized: false,
+});
+
+app.use(sessionMiddleware);
+
+io.use(function(socket, next) {
+    sessionMiddleware(socket.request, socket.request.res, next);
+});
+*/
 // Configuración de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAihQBOk71Jma1BSF61yDYhITp46j-kbmI",
@@ -135,6 +149,18 @@ app.put('/verify_Email', async function(req, res) {
     
 });
 
+io.on("connection", (socket) => {
+   //Esta línea es para compatibilizar con lo que venimos escribiendo
+  const req = socket.request;
+  
+   //Esto serìa el equivalente a un app.post, app.get...
+  socket.on('incoming-message', data =>{
+    console.log('INCOMING MESSAGE: ', data);
+    io.emit("server-message", { mensaje: "MENSAJE DEL SERVIDOR" });
+  });
+});
+
+setInterval(() => io.emit("server-message", {mensaje: "HOLI" }), 5000);
 /*
 app.post("/verify_Email", async function(req,res) {
   
