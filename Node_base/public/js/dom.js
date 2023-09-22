@@ -138,7 +138,8 @@ async function adminUsuarios(data){
     else {
       console.log("hola");
       /* recorrer respuesta y armar la tabla  */
-      listarUsuarios(result.respuesta[0].user_contacto);
+      crearChat(result.respuesta[0].user_contacto);
+      desplegarMensajes()
       //document.getElementById("form_login").submit()
     }
 
@@ -147,7 +148,7 @@ async function adminUsuarios(data){
   }
 }
 
-function listarUsuarios(user) {
+function crearChat(user) {
   const tablaChats = document.getElementById("tabla_chat");
   let i = 1
   let listar_var = "";
@@ -174,8 +175,8 @@ function listarUsuarios(user) {
           </ul>
 
       </div>
-  </div>
-  
+  </div>`
+  /*
   <div class="col-md-6 col-lg-7 col-xl-8" id="display_chat" style="display: none;">
             
     <ul class="list-unstyled">
@@ -201,14 +202,55 @@ function listarUsuarios(user) {
       <button type="button" class="btn btn-info btn-rounded float-end">Send</button>
     <ul>
   </div>
-      `
+      `*/
   i = i + 1
   tablaChats.innerHTML = listar_var;
 }
+function desplegarMensajes(){
+  const ulMensajes = document.getElementById("tabla_mensajes");
+  let listar_var_2 = "";
+  if(ulMensajes.style.display !== "none") {
+    ulMensajes.innerHTML = "";
+  }
+  else {
+    ulMensajes.style.display = "";
+  }
+  listar_var_2 = `
+  <div class="card w-100">
+                              <div class="card-header d-flex justify-content-between p-3">
+                                  <p class="fw-bold mb-0">Lara Croft</p>
+                                  <p class="text-muted small mb-0"><i class="far fa-clock"></i> 13 mins ago</p>
+                              </div>
+                              <div class="card-body">
+                                  <p class="mb-0">
+                                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                                  laudantium.
+                                  </p>
+                              </div>
+                              <div id="allNotes">
+                              </div>
+                          </div>
+                          <div class="shadow p-3 mb-5 bg-white rounded">
+                            <div id="allMessages">
+                            </div>
+                         </div>`
+  listar_var_2 += `<li class="bg-white mb-3">
+                      <div class="form-outline">
+                        <input type="text" id="mensaje" name="mensaje">
+                        <label class="form-label" for="textAreaExample2">Message</label>
+                      </div>
+                  </li>
+                  <h2> </h2>
+                  
+  <button type="button" class="btn btn-info btn-rounded float-end" onclick="newMessage()">Send</button>
+  </ul>`
 
+  ulMensajes.innerHTML = listar_var_2
+} 
+//HACERLO CON SOCKETIO
 function cambiarChat() {
   let n = 1
-  const registed = document.getElementById("display_chat");
+  const registed = document.getElementById("tabla_mensajes");
   if(registed.style.display !== "none") {
       registed.style.display = "none";
   }
@@ -216,6 +258,44 @@ function cambiarChat() {
       registed.style.display = "";
   }
 } 
+
+function getMessageContent() {
+  return document.getElementById("mensaje").value
+}
+
+
+function newMessagge(contenido) {
+  let idNote;
+  contenido = getMessageContent();
+
+  idNote= createNewMessage(contenido);
+  if (idNote != -1) {
+      drawNewMessage(contenido, idNote);
+  } 
+  else {
+      alert("No se pudo crear la nota");
+      return false;
+  }
+}
+
+function createNewMessage(contenido) {
+  if (contenido == "") {
+      alert("no se pudo crear la nota")
+      return -1
+      
+  }
+  else{
+      return 1
+  }
+}
+
+
+function drawNewMessage(mensaje) {
+  document.getElementById("allMessages").innerHTML += `        
+            <h2>${mensaje}</h2>
+`;
+}
+
 /*
 async function adminUsuarioss(){
   try {
