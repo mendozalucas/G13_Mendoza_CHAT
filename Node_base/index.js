@@ -33,7 +33,7 @@ const server = app.listen(Listen_Port, function() {
 });
 
 const io = require('socket.io')(server);
-/*
+
 const sessionMiddleware = session({
     secret: 'sararasthastka',
     resave: true,
@@ -45,7 +45,7 @@ app.use(sessionMiddleware);
 io.use(function(socket, next) {
     sessionMiddleware(socket.request, socket.request.res, next);
 });
-*/
+
 // Configuración de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAihQBOk71Jma1BSF61yDYhITp46j-kbmI",
@@ -63,7 +63,6 @@ const auth = getAuth(appFirebase);
 
 // Importar AuthService
 const authService = require("./authService");
-app.use(session({secret: '123456', resave: true, saveUninitialized: true}));
 
 
 app.get("/", (req, res) => {
@@ -156,11 +155,11 @@ io.on("connection", (socket) => {
    //Esto serìa el equivalente a un app.post, app.get...
   socket.on('incoming-message', data =>{
     console.log('INCOMING MESSAGE: ', data);
-    io.emit("server-message", { mensaje: "MENSAJE DEL SERVIDOR" });
+    io.emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });
   });
 });
 
-setInterval(() => io.emit("server-message", {mensaje: "HOLI" }), 5000);
+//setInterval(() => io.emit("server-message", {mensaje: "HOLI" }), 5000);
 /*
 app.post("/verify_Email", async function(req,res) {
   
