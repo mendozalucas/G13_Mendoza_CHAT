@@ -206,6 +206,16 @@ function crearChat(user) {
   i = i + 1
   tablaChats.innerHTML = listar_var;
 }
+function cambiarChat() {
+  let n = 1
+  const registed = document.getElementById("tabla_mensajes");
+  if(registed.style.display !== "none") {
+      registed.style.display = "none";
+  }
+  else {
+      registed.style.display = "";
+  }
+} 
 function desplegarMensajes(){
   const ulMensajes = document.getElementById("tabla_mensajes");
   let listar_var_2 = "";
@@ -227,8 +237,6 @@ function desplegarMensajes(){
                                   laudantium.
                                   </p>
                               </div>
-                              <div id="allNotes">
-                              </div>
                           </div>
                           <div class="shadow p-3 mb-5 bg-white rounded">
                             <div id="allMessages">
@@ -242,60 +250,45 @@ function desplegarMensajes(){
                   </li>
                   <h2> </h2>
                   
-  <button type="button" class="btn btn-info btn-rounded float-end" onclick="newMessage()">Send</button>
+  <button type="button" class="btn btn-info btn-rounded float-end" onclick="emitMessage()">Send</button>
   </ul>`
 
   ulMensajes.innerHTML = listar_var_2
-} 
-//HACERLO CON SOCKETIO
-function cambiarChat() {
-  let n = 1
-  const registed = document.getElementById("tabla_mensajes");
-  if(registed.style.display !== "none") {
-      registed.style.display = "none";
-  }
-  else {
-      registed.style.display = "";
-  }
-} 
+}
 
 function getMessageContent() {
   return document.getElementById("mensaje").value
 }
 
-
-function newMessagge(contenido) {
-  let idNote;
-  contenido = getMessageContent();
-
-  idNote= createNewMessage(contenido);
-  if (idNote != -1) {
-      drawNewMessage(contenido, idNote);
-  } 
+function innerMessage() {
+  const message_ = document.getElementById("tabla_mensajes_2");
+  let mensaje_ = getMessageContent();
+  let listar_var_3 = "";
+  if(message_.style.display !== "none") {
+    message_.innerHTML = "";
+  }
   else {
-      alert("No se pudo crear la nota");
-      return false;
+    message_.style.display = ""
   }
+  listar_var_3 = `   
+  <div class="card w-100">
+    <div class="card-header d-flex justify-content-between p-3">
+        <p class="fw-bold mb-0">Lara Croft</p>
+        <p class="text-muted small mb-0"><i class="far fa-clock"></i> 13 mins ago</p>
+    </div>
+    <div class="card-body">
+        <p class="mb-0">
+        ${mensaje_}
+        </p>
+    </div>
+  </div>
+  <div class="shadow p-3 mb-5 bg-white rounded">
+    <div id="allMessages">
+    </div>
+  </div>`
+  listar_var_3 += '</ul>'
+  message_.innerHTML = listar_var_3
 }
-
-function createNewMessage(contenido) {
-  if (contenido == "") {
-      alert("no se pudo crear la nota")
-      return -1
-      
-  }
-  else{
-      return 1
-  }
-}
-
-
-function drawNewMessage(mensaje) {
-  document.getElementById("allMessages").innerHTML += `        
-            <h2>${mensaje}</h2>
-`;
-}
-
 /*
 async function adminUsuarioss(){
   try {

@@ -12,3 +12,8 @@ socket.on("server-message", data => {
 function funcionPrueba() {
     socket.emit("incoming-message", { mensaje: "PRUEBA"});
 }
+
+function emitMessage() {
+    let mensaje = getMessageContent()
+    socket.emit("incoming-message", { mensaje: mensaje});
+}
