@@ -76,8 +76,9 @@ app.get("/register", (req, res) => {
 app.post("/register", async (req, res) => {
   const { email, password } = req.body;
   try {
-    await authService.registerUser(auth, { email, password });
-    id_contacto = id_contacto + 1
+    let userCredential = await authService.registerUser(auth, { email, password });
+    let id_contacto = userCredential.user.uid
+    console.log(id_contacto)
     await MySQL.realizarQuery(`
         INSERT INTO MC_contactos (id_contacto, user_contacto, password_contacto )
         VALUES ("${id_contacto}", "${email}", "${password}"); `)

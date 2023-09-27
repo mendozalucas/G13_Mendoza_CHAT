@@ -18,6 +18,7 @@ const registerUser = async (auth, { email, password }) => {
     /*
     console.log("Usuario actual " , auth.currentUser)
     console.log("Id actual ", userCredential.UserCredentialImpl) */
+    return userCredential;
   } catch (error) {
     console.error("Error registering user:", error);
     throw error;

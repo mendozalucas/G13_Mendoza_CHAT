@@ -9,7 +9,7 @@ socket.on("server-message", data => {
     console.log("Me llego del servidor", data);
 });
 
-function funcionPrueba() {
+function funcionPruebaa() {
     socket.emit("incoming-message", { mensaje: "PRUEBA"});
 }
 

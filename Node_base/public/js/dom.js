@@ -148,8 +148,13 @@ async function adminUsuarios(data){
   }
 }
 
+function getApodo() {
+  return document.getElementById("apodo").value
+}
+
 function crearChat(user) {
   const tablaChats = document.getElementById("tabla_chat");
+  let apodo_ = getApodo()
   let i = 1
   let listar_var = "";
   if(tablaChats.style.display !== "none") {
@@ -167,7 +172,7 @@ function crearChat(user) {
                   <a href="#!" class="d-flex justify-content-between">
                   <div class="d-flex flex-row">
                       <div class="pt-1">
-                      <button class="fw-bold mb-0" onclick="cambiarChat()">${user}</button>
+                      <button class="fw-bold mb-0" onclick="cambiarChat()">${apodo_}</button>
                       </div>
                   </div>
                   </a>
@@ -226,22 +231,11 @@ function desplegarMensajes(){
     ulMensajes.style.display = "";
   }
   listar_var_2 = `
-  <div class="card w-100">
-                              <div class="card-header d-flex justify-content-between p-3">
-                                  <p class="fw-bold mb-0">Lara Croft</p>
-                                  <p class="text-muted small mb-0"><i class="far fa-clock"></i> 13 mins ago</p>
-                              </div>
-                              <div class="card-body">
-                                  <p class="mb-0">
-                                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                                  laudantium.
-                                  </p>
-                              </div>
-                          </div>
-                          <div class="shadow p-3 mb-5 bg-white rounded">
-                            <div id="allMessages">
-                            </div>
-                         </div>`
+  <h2>EMPIEZA EL CHAT</h2>
+                         <ul class="list-unstyled">
+                          <li id="tabla_mensajes_2" style="display: none">
+                                                  
+                          </li>  `
   listar_var_2 += `<li class="bg-white mb-3">
                       <div class="form-outline">
                         <input type="text" id="mensaje" name="mensaje">
@@ -260,6 +254,43 @@ function getMessageContent() {
   return document.getElementById("mensaje").value
 }
 
+socket.on("connect", () => {
+    console.log("Me conecté a WS");
+});
+
+socket.on("server-message", data => {
+  console.log("Me llego del servidor", data.mensaje);
+  console.log("Me llego del servidor", data.user);
+  let getMensaje = data.mensaje;
+  let getUser = data.user
+  mandarMensaje(getMensaje, getUser)
+});
+
+function mandarMensaje(getMensaje, getUser) {
+  const message_ = document.getElementById("tabla_mensajes_2");
+  console.log("mensaje: ", getMensaje);
+  let listar_var_3 = "";
+  listar_var_3 = `   
+  <div class="card w-100">
+    <div class="card-header d-flex justify-content-between p-3">
+        <p class="fw-bold mb-0">${getUser}</p>
+        <p class="text-muted small mb-0"><i class="far fa-clock"></i> 13 mins ago</p>
+    </div>
+    <div class="card-body">
+        <p class="mb-0">
+        ${getMensaje}
+        </p>
+    </div>
+  </div>
+  <div class="shadow p-3 mb-5 bg-white rounded">
+    <div id="allMessages">
+    </div>
+  </div>`
+  listar_var_3 += '</ul>'
+  message_.innerHTML += listar_var_3
+  message_.style.display = ""
+}
+/*
 function innerMessage() {
   const message_ = document.getElementById("tabla_mensajes_2");
   let mensaje_ = getMessageContent();
@@ -288,7 +319,7 @@ function innerMessage() {
   </div>`
   listar_var_3 += '</ul>'
   message_.innerHTML = listar_var_3
-}
+}*/
 /*
 async function adminUsuarioss(){
   try {
