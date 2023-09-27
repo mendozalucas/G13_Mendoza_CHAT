@@ -226,3 +226,12 @@ select {
 .gris{
   background-color: grey;
 }
+.margen{
+  margin:right;
+}
+
+
+
+#tabla_mensajes {
+  margin-left: 400px;
+}
