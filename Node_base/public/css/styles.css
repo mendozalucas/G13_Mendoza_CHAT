@@ -200,12 +200,17 @@ select {
   align-items: center;
 }
 
-.row{
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+.columna {
+  float: left;
+  width: 50%;
 }
 
+/* Clear floats after the columns */
+.fila:after {
+  content: "";
+  display: table;
+  clear: both;
+}
 
 .Cuadrado {
   border:none;
@@ -226,12 +231,7 @@ select {
 .gris{
   background-color: grey;
 }
-.margen{
-  margin:right;
-}
-
-
-
+/*
 #tabla_mensajes {
-  margin-left: 400px;
-}
+  margin-left: 350px;
+}*/
