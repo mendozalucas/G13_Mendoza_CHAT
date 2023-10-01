@@ -13,7 +13,7 @@ const {
   GoogleAuthProvider,
 } = require("firebase/auth");
 
-let id_contacto = 0
+let id_chat_ = 1
 const app = express();
 app.use(express.static('/Node_base/public/js/Wordle.js'));
 
@@ -78,7 +78,6 @@ app.post("/register", async (req, res) => {
   try {
     let userCredential = await authService.registerUser(auth, { email, password });
     let id_contacto = userCredential.user.uid
-    console.log(id_contacto)
     await MySQL.realizarQuery(`
         INSERT INTO MC_contactos (id_contacto, user_contacto, password_contacto )
         VALUES ("${id_contacto}", "${email}", "${password}"); `)
@@ -106,7 +105,9 @@ app.post("/login", async (req, res) => {
       password,
     });
     req.session.Dato = req.body.email;
+    console.log("usuario logueado: ", req.session.Dato);
     // Aquí puedes redirigir al usuario a la página que desees después del inicio de sesión exitoso
+
     res.redirect("/chat");
   } catch (error) {
     console.error("Error en el inicio de sesión:", error);
@@ -128,6 +129,24 @@ app.get("/logout", (req, res) => {
   res.render("login");
 });
 
+app.put('/cargar_chat', async function(req, res) {
+  let usuario_logueado = req.session.Dato;
+  let usuarios_chats= await MySQL.realizarQuery(`SELECT MC_usuarioschats.id_chat, MC_chats.nombre_receptor, MC_contactos.user_contacto
+  FROM MC_usuarioschats
+  INNER JOIN MC_chats ON MC_usuarioschats.id_chat = MC_chats.id_chat
+  INNER JOIN MC_contactos ON MC_usuarioschats.id_contacto = MC_contactos.id_contacto;`)
+    //Chequeo el largo del vector a ver si tiene datos
+    if (usuarios_chats.length > 0) {
+        //Armo un objeto para responder
+        console.log("true_put_chat");
+        console.log(usuarios_chats)
+        res.send({validar: true, respuesta: {usuarios_chats}, usuario_: {usuario_logueado}})    
+    }
+    else{
+        console.log("false_put_chat");
+        res.send({validar:false})    
+    }   
+});
 
 app.put('/verify_Email', async function(req, res) {
   //Petición PUT con URL = "/login"
@@ -137,9 +156,23 @@ app.put('/verify_Email', async function(req, res) {
   let verificacion = await MySQL.realizarQuery(`SELECT user_contacto FROM MC_contactos WHERE user_contacto = "${verificarMail}"`)
   //Chequeo el largo del vector a ver si tiene datos "${verificarMail}"
   console.log("verificacion", verificacion)
+  let id_contacto_logueado = await MySQL.realizarQuery(`SELECT id_contacto FROM MC_contactos WHERE user_contacto = "${req.session.Dato}"`);
   if (verificacion.length > 0) {
       //Armo un objeto para responder
       console.log("true_put");
+      let verificar_id_chat_2 = await MySQL.realizarQuery(`SELECT MC_usuarioschats.id FROM MC_usuarioschats INNER JOIN MC_chats ON MC_usuarioschats.id_chat = MC_chats.id_chat WHERE MC_usuarioschats.id_contacto = "${id_contacto_logueado[0].id_contacto}" AND MC_chats.nombre_receptor = "${verificarMail}"`)
+      //let verificar_id_chat = await MySQL.realizarQuery(`SELECT id_chat FROM MC_chats WHERE nombre_receptor = "${verificarMail}"`)
+      if(verificar_id_chat_2.length == 0) {
+        console.log("se hizo el push del chat a sql");
+        //push del chat con el nuevo mail
+        let chat_nuevo = await MySQL.realizarQuery(`INSERT INTO MC_chats (nombre_receptor) VALUES ("${verificarMail}"); `);
+        let verificar_id_chat_3 = await MySQL.realizarQuery(`SELECT id_chat FROM MC_chats WHERE nombre_receptor = "${verificarMail}"`)
+        let carga_chats_usuario = await MySQL.realizarQuery(`INSERT INTO MC_usuarioschats (id_contacto, id_chat) VALUES ("${id_contacto_logueado[0].id_contacto}", "${verificar_id_chat_3[0].id_chat}"); `);
+      } else if (verificar_id_chat_2.length > 0) {
+        console.log("no se hizo el push del chat a sql");
+        return 0;   
+      }
+      
       res.send({validar: true, respuesta: verificacion})    
   }
   else{
@@ -152,7 +185,7 @@ app.put('/verify_Email', async function(req, res) {
 io.on("connection", (socket) => {
    //Esta línea es para compatibilizar con lo que venimos escribiendo
   const req = socket.request;
-  
+
    //Esto serìa el equivalente a un app.post, app.get...
   socket.on('incoming-message', data =>{
     console.log('INCOMING MESSAGE: ', data);

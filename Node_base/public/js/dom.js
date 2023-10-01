@@ -1,6 +1,6 @@
 
 //Esta funcion la llama el boton Ingresar que tiene que ser type button para ejecutar el onclick
- function login() {
+function login() {
   //Leo los datos del input
   console.log("LOGIN");
   let usuario = document.getElementById("email").value;
@@ -104,6 +104,65 @@ async function putJSON_2(data) {
     }
   }
 */
+async function fetchChats(){
+  try {
+    const response = await fetch("/cargar_chat", {
+      method: "PUT", // or 'POST'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(),
+    });
+    
+    //En result obtengo la respuesta
+    const result = await response.json();
+    console.log("Success:", result);
+      console.log(result);
+
+    if (result.validar == false) {
+      console.error("A:Error:", error);
+    } 
+    else {
+      /* recorrer respuesta y armar la tabla  */
+      cargarChats(result.respuesta.usuarios_chats);
+      desplegarMensajes()
+      //document.getElementById("form_login").submit()
+    }
+  } catch (error) {
+    console.error("B:Error:", error);
+  }
+}
+
+function cargarChats(usuarios_chats) {
+  const tablaChats_creados = document.getElementById("desplegar_chats_creados");
+  let listar_var_4 = ""; 
+  for (let u = 0; u < usuarios_chats.length; u++) {
+    listar_var_4 +=
+    `
+  <div class="card">
+      <div class="card-body">
+
+          <ul class="list-unstyled mb-0">
+              <li class="p-2 border-bottom" style="background-color: #eee;">
+                  <a href="#!" class="d-flex justify-content-between">
+                  <div class="d-flex flex-row">
+                      <div class="pt-1">
+                        <button class="fw-bold mb-0" onclick="cambiarChat()">${usuarios_chats[u].nombre_receptor}</button> 
+                      </div>
+                  </div>
+                  <div class="pt-1">
+                    <p class="small text-muted mb-1">Chat id: ${usuarios_chats[u].id_chat}</p>
+                  </a>
+              </li>
+          </ul>
+
+      </div>
+  </div>
+  `
+  }
+  tablaChats_creados.innerHTML = listar_var_4;
+}
+
 function fetcheado() {
   //Leo los datos del input
   let email_ = document.getElementById("verificar_mail").value;
@@ -132,11 +191,9 @@ async function adminUsuarios(data){
       console.log(result);
 
     if (result.validar == false) {
-      console.log("holae");
       console.error("A:Error:", error);
     } 
     else {
-      console.log("hola");
       /* recorrer respuesta y armar la tabla  */
       crearChat(result.respuesta[0].user_contacto);
       desplegarMensajes()
@@ -149,13 +206,12 @@ async function adminUsuarios(data){
 }
 
 function getApodo() {
-  return document.getElementById("apodo").value
+  return document.getElementById("apodo").value;
 }
 
 function crearChat(user) {
   const tablaChats = document.getElementById("tabla_chat");
-  let apodo_ = getApodo()
-  let i = 1
+  let apodo_ = getApodo();
   let listar_var = "";
   if(tablaChats.style.display !== "none") {
     tablaChats.innerHTML = "";
@@ -181,36 +237,11 @@ function crearChat(user) {
 
       </div>
   </div>`
-  /*
-  <div class="col-md-6 col-lg-7 col-xl-8" id="display_chat" style="display: none;">
-            
-    <ul class="list-unstyled">
-      <li class="d-flex justify-content-between mb-4">
-        <div class="card w-100">
-            <div class="card-header d-flex justify-content-between p-3">
-                <p class="fw-bold mb-0">Lara Croft</p>
-                <p class="text-muted small mb-0"><i class="far fa-clock"></i> 13 mins ago</p>
-            </div>
-            <div class="card-body">
-                <p class="mb-0">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                laudantium.
-                </p>
-            </div>
-        </div>
-      </li>
-      <li class="bg-white mb-3">
-        <div class="form-outline">
-          <input type="text" for="textAreaExample2">Message</input>
-        </div>
-      </li>
-      <button type="button" class="btn btn-info btn-rounded float-end">Send</button>
-    <ul>
-  </div>
-      `*/
-  i = i + 1
   tablaChats.innerHTML = listar_var;
 }
+
+
+
 function cambiarChat() {
   let n = 1
   const registed = document.getElementById("tabla_mensajes");
@@ -221,6 +252,7 @@ function cambiarChat() {
       registed.style.display = "";
   }
 } 
+
 function desplegarMensajes(){
   const ulMensajes = document.getElementById("tabla_mensajes");
   let listar_var_2 = "";
@@ -231,7 +263,7 @@ function desplegarMensajes(){
     ulMensajes.style.display = "";
   }
   listar_var_2 = `
-  <h2>EMPIEZA EL CHAT</h2>
+  <h2>Chat con</h2>
                          <ul class="list-unstyled">
                           <li id="tabla_mensajes_2" style="display: none">
                                                   
@@ -247,7 +279,8 @@ function desplegarMensajes(){
   <button type="button" class="btn btn-info btn-rounded float-end" onclick="emitMessage()">Send</button>
   </ul>`
 
-  ulMensajes.innerHTML = listar_var_2
+    ulMensajes.innerHTML = listar_var_2;
+
 }
 
 function getMessageContent() {
@@ -262,13 +295,13 @@ socket.on("server-message", data => {
   console.log("Me llego del servidor", data.mensaje);
   console.log("Me llego del servidor", data.user);
   let getMensaje = data.mensaje;
-  let getUser = data.user
-  mandarMensaje(getMensaje, getUser)
+  let getUser = data.user;
+  mandarMensaje(getMensaje, getUser);
 });
 
 function mandarMensaje(getMensaje, getUser) {
   const message_ = document.getElementById("tabla_mensajes_2");
-  console.log("mensaje: ", getMensaje);
+  console.log("mensajee: ", getMensaje);
   let listar_var_3 = "";
   listar_var_3 = `   
   <div class="card w-100">
