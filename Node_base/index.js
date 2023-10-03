@@ -185,13 +185,30 @@ app.put('/verify_Email', async function(req, res) {
 io.on("connection", (socket) => {
    //Esta línea es para compatibilizar con lo que venimos escribiendo
   const req = socket.request;
-
    //Esto serìa el equivalente a un app.post, app.get...
   socket.on('incoming-message', data =>{
     console.log('INCOMING MESSAGE: ', data);
     io.emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });
   });
 });
+/*
+io.on("connection", socket => {
+
+  socket.join("some room");
+  
+  io.to("some room").emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });
+  });
+});*/
+/*
+io.on("connection", async (socket) => {
+  const userId = await MySQL.realizarQuery(`SELECT id_contacto FROM MC_contactos WHERE user_contacto = "${req.session.Dato}"`);
+
+  socket.join(userId);
+
+  // and then later
+  io.to(userId).emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });;
+});*/
+
 
 //setInterval(() => io.emit("server-message", {mensaje: "HOLI" }), 5000);
 /*
@@ -217,5 +234,4 @@ app.post("/verify_Email", async function(req,res) {
     res.render('chat', {aviso_chat: "El email que haz ingresado existe, falta el innerhtml para comenzar el chat"});
   }
 
-});
-/************************************** */
+}); */

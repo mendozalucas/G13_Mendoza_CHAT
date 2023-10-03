@@ -147,11 +147,11 @@ function cargarChats(usuarios_chats) {
                   <a href="#!" class="d-flex justify-content-between">
                   <div class="d-flex flex-row">
                       <div class="pt-1">
-                        <button class="fw-bold mb-0" onclick="cambiarChat()">${usuarios_chats[u].nombre_receptor}</button> 
+                        <button class="fw-bold mb-0" onclick="cambiarChat(this)" id="${usuarios_chats[u].id_chat}">${usuarios_chats[u].nombre_receptor}</button> 
                       </div>
                   </div>
                   <div class="pt-1">
-                    <p class="small text-muted mb-1">Chat id: ${usuarios_chats[u].id_chat}</p>
+                    <p class="small text-muted mb-1" id="${usuarios_chats[u].id_chat}" >Chat id: ${usuarios_chats[u].id_chat}</p>
                   </a>
               </li>
           </ul>
@@ -162,7 +162,17 @@ function cargarChats(usuarios_chats) {
   }
   tablaChats_creados.innerHTML = listar_var_4;
 }
-
+/*
+function getbuttonID() {
+  const buttons = document.getElementsByTagName("button");
+  ​
+  const buttonPressed = e => { 
+    let id_button= e.target.id;
+    console.log(buttonPressed);
+  }
+  return buttonPressed;
+}
+*/
 function fetcheado() {
   //Leo los datos del input
   let email_ = document.getElementById("verificar_mail").value;
@@ -228,7 +238,7 @@ function crearChat(user) {
                   <a href="#!" class="d-flex justify-content-between">
                   <div class="d-flex flex-row">
                       <div class="pt-1">
-                      <button class="fw-bold mb-0" onclick="cambiarChat()">${apodo_}</button>
+                      <button class="fw-bold mb-0" onclick="cambiarChat(this)">${apodo_}</button>
                       </div>
                   </div>
                   </a>
@@ -242,8 +252,10 @@ function crearChat(user) {
 
 
 
-function cambiarChat() {
+function cambiarChat(boton) {
   let n = 1
+  console.log(boton)
+  console.log(boton.id)
   const registed = document.getElementById("tabla_mensajes");
   if(registed.style.display !== "none") {
       registed.style.display = "none";
