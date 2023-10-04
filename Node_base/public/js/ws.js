@@ -4,10 +4,10 @@ const socket = io(IP);
 socket.on("connect", () => {
     console.log("Me conecté a WS");
 });
-
+/*
 socket.on("server-message", data => {
     console.log("Me llego del servidor", data);
-});
+});*/
 
 function funcionPruebaa() {
     socket.emit("incoming-message", { mensaje: "PRUEBA"});

@@ -128,7 +128,7 @@ app.get("/logout", (req, res) => {
   console.log("sesion destruida")
   res.render("login");
 });
-
+/*
 app.put('/cargar_chat', async function(req, res) {
   let usuario_logueado = req.session.Dato;
   let usuarios_chats= await MySQL.realizarQuery(`SELECT MC_usuarioschats.id_chat, MC_chats.nombre_receptor, MC_contactos.user_contacto
@@ -147,7 +147,7 @@ app.put('/cargar_chat', async function(req, res) {
         res.send({validar:false})    
     }   
 });
-
+*/
 app.put('/verify_Email', async function(req, res) {
   //Petición PUT con URL = "/login"
   let verificarMail = req.body.mail
@@ -160,6 +160,7 @@ app.put('/verify_Email', async function(req, res) {
   if (verificacion.length > 0) {
       //Armo un objeto para responder
       console.log("true_put");
+      /*
       let verificar_id_chat_2 = await MySQL.realizarQuery(`SELECT MC_usuarioschats.id FROM MC_usuarioschats INNER JOIN MC_chats ON MC_usuarioschats.id_chat = MC_chats.id_chat WHERE MC_usuarioschats.id_contacto = "${id_contacto_logueado[0].id_contacto}" AND MC_chats.nombre_receptor = "${verificarMail}"`)
       //let verificar_id_chat = await MySQL.realizarQuery(`SELECT id_chat FROM MC_chats WHERE nombre_receptor = "${verificarMail}"`)
       if(verificar_id_chat_2.length == 0) {
@@ -171,7 +172,7 @@ app.put('/verify_Email', async function(req, res) {
       } else if (verificar_id_chat_2.length > 0) {
         console.log("no se hizo el push del chat a sql");
         return 0;   
-      }
+      } */
       
       res.send({validar: true, respuesta: verificacion})    
   }
