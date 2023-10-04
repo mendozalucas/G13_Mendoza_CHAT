@@ -183,22 +183,33 @@ app.put('/verify_Email', async function(req, res) {
 });
 
 io.on("connection", (socket) => {
-   //Esta línea es para compatibilizar con lo que venimos escribiendo
   const req = socket.request;
-   //Esto serìa el equivalente a un app.post, app.get...
+  
+
   socket.on('incoming-message', data =>{
     console.log('INCOMING MESSAGE: ', data);
-    io.emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });
+    //io.emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });
+    console.log('CHAT: ', req.session.id_chat);
+    socket.join(req.session.id_chat);
+    io.to(req.session.id_chat).emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });
   });
+
+  socket.on('join-chat', idchat =>{
+    console.log('INCOMING IDCHAT', idchat);
+    socket.join(idchat);
+    req.session.id_chat = idchat;
+  });
+  
 });
 /*
-io.on("connection", socket => {
+socket.on('guardar_mensaje', data => {
 
-  socket.join("some room");
-  
-  io.to("some room").emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });
-  });
-});*/
+
+
+}) 
+*/
+
+
 /*
 io.on("connection", async (socket) => {
   const userId = await MySQL.realizarQuery(`SELECT id_contacto FROM MC_contactos WHERE user_contacto = "${req.session.Dato}"`);

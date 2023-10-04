@@ -17,9 +17,10 @@ function emitMessage() {
     let mensaje = getMessageContent()
     socket.emit("incoming-message", { mensaje: mensaje});
 }
+/*
 io.on("connection", socket => {
 
     socket.join("some room");
     
     io.to("some room").emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });
-});
+});*/

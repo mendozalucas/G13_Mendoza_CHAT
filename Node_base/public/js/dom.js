@@ -254,8 +254,8 @@ function crearChat(user) {
 
 function cambiarChat(boton) {
   let n = 1
-  console.log(boton)
   console.log(boton.id)
+  socket.emit("join-chat", { idchat: boton.id});
   const registed = document.getElementById("tabla_mensajes");
   if(registed.style.display !== "none") {
       registed.style.display = "none";
@@ -264,6 +264,8 @@ function cambiarChat(boton) {
       registed.style.display = "";
   }
 } 
+
+
 
 function desplegarMensajes(){
   const ulMensajes = document.getElementById("tabla_mensajes");
@@ -314,6 +316,7 @@ socket.on("server-message", data => {
 function mandarMensaje(getMensaje, getUser) {
   const message_ = document.getElementById("tabla_mensajes_2");
   console.log("mensajee: ", getMensaje);
+  
   let listar_var_3 = "";
   listar_var_3 = `   
   <div class="card w-100">
