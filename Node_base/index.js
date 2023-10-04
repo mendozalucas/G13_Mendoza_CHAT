@@ -131,10 +131,12 @@ app.get("/logout", (req, res) => {
 
 app.put('/cargar_chat', async function(req, res) {
   let usuario_logueado = req.session.Dato;
+
   let usuarios_chats= await MySQL.realizarQuery(`SELECT MC_usuarioschats.id_chat, MC_chats.nombre_receptor, MC_contactos.user_contacto
   FROM MC_usuarioschats
   INNER JOIN MC_chats ON MC_usuarioschats.id_chat = MC_chats.id_chat
-  INNER JOIN MC_contactos ON MC_usuarioschats.id_contacto = MC_contactos.id_contacto;`)
+  INNER JOIN MC_contactos ON MC_usuarioschats.id_contacto = MC_contactos.id_contacto
+  WHERE MC_contactos.user_contacto = "${usuario_logueado}";`)
     //Chequeo el largo del vector a ver si tiene datos
     if (usuarios_chats.length > 0) {
         //Armo un objeto para responder

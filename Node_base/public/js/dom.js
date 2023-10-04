@@ -322,7 +322,7 @@ function mandarMensaje(getMensaje, getUser) {
   <div class="card w-100">
     <div class="card-header d-flex justify-content-between p-3">
         <p class="fw-bold mb-0">${getUser}</p>
-        <p class="text-muted small mb-0"><i class="far fa-clock"></i> 13 mins ago</p>
+        <p class="text-muted small mb-0"><i class="far fa-clock"></i>Just now</p>
     </div>
     <div class="card-body">
         <p class="mb-0">
