@@ -125,7 +125,7 @@ async function fetchChats(){
     else {
       /* recorrer respuesta y armar la tabla  */
       cargarChats(result.respuesta.usuarios_chats);
-      desplegarMensajes()
+      //desplegarMensajes()
       //document.getElementById("form_login").submit()
     }
   } catch (error) {
@@ -147,7 +147,7 @@ function cargarChats(usuarios_chats) {
                   <a href="#!" class="d-flex justify-content-between">
                   <div class="d-flex flex-row">
                       <div class="pt-1">
-                        <button class="fw-bold mb-0" onclick="cambiarChat(this)" id="${usuarios_chats[u].id_chat}">${usuarios_chats[u].nombre_receptor}</button> 
+                        <button class="fw-bold mb-0" onclick="desplegarMensajes(this)" id="${usuarios_chats[u].id_chat}">${usuarios_chats[u].nombre_receptor}</button> 
                       </div>
                   </div>
                   <div class="pt-1">
@@ -162,17 +162,7 @@ function cargarChats(usuarios_chats) {
   }
   tablaChats_creados.innerHTML = listar_var_4;
 }
-/*
-function getbuttonID() {
-  const buttons = document.getElementsByTagName("button");
-  ​
-  const buttonPressed = e => { 
-    let id_button= e.target.id;
-    console.log(buttonPressed);
-  }
-  return buttonPressed;
-}
-*/
+
 function fetcheado() {
   //Leo los datos del input
   let email_ = document.getElementById("verificar_mail").value;
@@ -206,7 +196,7 @@ async function adminUsuarios(data){
     else {
       /* recorrer respuesta y armar la tabla  */
       crearChat(result.respuesta[0].user_contacto);
-      desplegarMensajes()
+      //desplegarMensajes()
       //document.getElementById("form_login").submit()
     }
 
@@ -238,7 +228,7 @@ function crearChat(user) {
                   <a href="#!" class="d-flex justify-content-between">
                   <div class="d-flex flex-row">
                       <div class="pt-1">
-                      <button class="fw-bold mb-0" onclick="cambiarChat(this)">${apodo_}</button>
+                      <button class="fw-bold mb-0" onclick=" desplegarMensajes(this)">${apodo_}</button>
                       </div>
                   </div>
                   </a>
@@ -251,11 +241,10 @@ function crearChat(user) {
 }
 
 
-
+/*
 function cambiarChat(boton) {
   let n = 1
-  console.log(boton.id)
-  socket.emit("join-chat", { idchat: boton.id});
+
   const registed = document.getElementById("tabla_mensajes");
   if(registed.style.display !== "none") {
       registed.style.display = "none";
@@ -263,12 +252,14 @@ function cambiarChat(boton) {
   else {
       registed.style.display = "";
   }
-} 
+} */
 
 
 
-function desplegarMensajes(){
+function desplegarMensajes(boton){
   const ulMensajes = document.getElementById("tabla_mensajes");
+  console.log(boton.id)
+  socket.emit("join-chat", { idchat: boton.id});
   let listar_var_2 = "";
   if(ulMensajes.style.display !== "none") {
     ulMensajes.innerHTML = "";
@@ -277,7 +268,6 @@ function desplegarMensajes(){
     ulMensajes.style.display = "";
   }
   listar_var_2 = `
-  <h2>Chat con</h2>
                          <ul class="list-unstyled">
                           <li id="tabla_mensajes_2" style="display: none">
                                                   
@@ -315,7 +305,7 @@ socket.on("server-message", data => {
 
 function mandarMensaje(getMensaje, getUser) {
   const message_ = document.getElementById("tabla_mensajes_2");
-  console.log("mensajee: ", getMensaje);
+  console.log("mensaje: ", getMensaje);
   
   let listar_var_3 = "";
   listar_var_3 = `   
