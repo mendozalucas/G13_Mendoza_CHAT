@@ -255,7 +255,8 @@ function crearChat(user) {
 function cambiarChat(boton) {
   let n = 1
   console.log(boton.id)
-  socket.emit("join-chat", { idchat: boton.id});
+  unirmeAlChat(boton.id)
+  
   const registed = document.getElementById("tabla_mensajes");
   if(registed.style.display !== "none") {
       registed.style.display = "none";
@@ -301,17 +302,7 @@ function getMessageContent() {
   return document.getElementById("mensaje").value
 }
 
-socket.on("connect", () => {
-    console.log("Me conecté a WS");
-});
 
-socket.on("server-message", data => {
-  console.log("Me llego del servidor", data.mensaje);
-  console.log("Me llego del servidor", data.user);
-  let getMensaje = data.mensaje;
-  let getUser = data.user;
-  mandarMensaje(getMensaje, getUser);
-});
 
 function mandarMensaje(getMensaje, getUser) {
   const message_ = document.getElementById("tabla_mensajes_2");

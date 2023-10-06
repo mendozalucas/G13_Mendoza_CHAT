@@ -192,7 +192,6 @@ io.on("connection", (socket) => {
     console.log('INCOMING MESSAGE: ', data);
     //io.emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });
     console.log('CHAT: ', req.session.id_chat);
-    socket.join(req.session.id_chat);
     io.to(req.session.id_chat).emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });
   });
 
@@ -200,9 +199,13 @@ io.on("connection", (socket) => {
     console.log('INCOMING IDCHAT', idchat);
     socket.join(idchat);
     req.session.id_chat = idchat;
+    io.to(idchat).emit("server-chat",{mensaje: "hola"});
   });
   
 });
+
+//setInterval(() => io.to('14').emit("server-message", {mensaje: "PRUEBA" }), 5000);
+
 /*
 socket.on('guardar_mensaje', data => {
 
