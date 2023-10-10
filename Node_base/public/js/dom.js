@@ -117,7 +117,6 @@ async function fetchChats(){
     //En result obtengo la respuesta
     const result = await response.json();
     console.log("Success:", result);
-      console.log(result);
 
     if (result.validar == false) {
       console.error("A:Error:", error);
@@ -125,7 +124,7 @@ async function fetchChats(){
     else {
       /* recorrer respuesta y armar la tabla  */
       cargarChats(result.respuesta.usuarios_chats, result.usuario_);
-      desplegarMensajes()
+      //desplegarMensajes()
       //document.getElementById("form_login").submit()
     }
   } catch (error) {
@@ -136,7 +135,7 @@ async function fetchChats(){
 function cargarChats(usuarios_chats, usuario_) {
   const tablaChats_creados = document.getElementById("desplegar_chats_creados");
   let user_logueado = usuario_.usuario_logueado;
-
+  let length_chats = usuarios_chats.length
   let listar_var_4 = ""; 
   for (let u = 0; u < usuarios_chats.length; u++) {
     listar_var_4 +=
@@ -151,7 +150,7 @@ function cargarChats(usuarios_chats, usuario_) {
                   if (usuarios_chats[u].nombre_receptor == user_logueado) {
                     listar_var_4 +=
                   `<div class="pt-1">
-                        <button class="fw-bold mb-0" onclick="cambiarChat(this)" id="${usuarios_chats[u].id}">YOU: ${usuarios_chats[u].nombre_receptor}</button> 
+                        <button class="fw-bold mb-0" onclick="cambiarChat(this, ${usuarios_chats[u].id})" id="${usuarios_chats[u].id}">YOU: ${usuarios_chats[u].nombre_receptor}</button> 
                       </div>
                       </div>
                     <div class="pt-1">
@@ -165,7 +164,7 @@ function cargarChats(usuarios_chats, usuario_) {
                   }else {
                     listar_var_4 +=
                     `<div class="pt-1">
-                          <button class="fw-bold mb-0" onclick="cambiarChat(this)" id="${usuarios_chats[u].id}">${usuarios_chats[u].nombre_receptor}</button> 
+                          <button class="fw-bold mb-0" onclick="cambiarChat(this, ${usuarios_chats[u].id})" id="${usuarios_chats[u].id}">${usuarios_chats[u].nombre_receptor}</button> 
                         </div>
                       </div>
                     <div class="pt-1">
@@ -173,10 +172,16 @@ function cargarChats(usuarios_chats, usuario_) {
                     </a>
                 </li>
             </ul>
-
         </div>
-    </div>`
-                  }
+    </div>
+    `
+    }
+    listar_var_4 += `<div class="column">
+                      <ul class="list-unstyled">
+                          <li id="tabla_mensajes_${usuarios_chats[u].id}" style="display: none">
+                                                  
+                          </li>
+                  </div>`
   }
   tablaChats_creados.innerHTML = listar_var_4;
 }
@@ -225,7 +230,7 @@ async function adminUsuarios(data){
       /* recorrer respuesta y armar la tabla  */
       console.log(result.respuesta.verificacion)
       crearChat(result.respuesta.verificacion);
-      desplegarMensajes()
+      //desplegarMensajes()
       //document.getElementById("form_login").submit() [0].user_contacto
     }
 
@@ -258,7 +263,7 @@ function crearChat(verificacion) {
                   <a href="#!" class="d-flex justify-content-between">
                   <div class="d-flex flex-row">
                       <div class="pt-1">
-                      <button class="fw-bold mb-0" onclick="cambiarChat(this)" id="${id_chat}">${apodo_}</button>
+                      <button class="fw-bold mb-0" onclick="cambiarChat(this, ${id_chat})" id="${id_chat}">${apodo_}</button>
                       </div>
                   </div>
                   <div class="pt-1">
@@ -267,29 +272,53 @@ function crearChat(verificacion) {
                   </a>
               </li>
           </ul>
-
       </div>
+  </div>
+  <div class="column">
+    <ul class="list-unstyled">
+        <li id="tabla_mensajes_${id_chat}" style="display: none">
+                                
+        </li>
   </div>`
   tablaChats.innerHTML = listar_var;
 }
 
 
 
-function cambiarChat(boton) {
-  let n = 1
+function cambiarChat(boton, id) {
   console.log(boton.id)
   socket.emit("join-chat", { idchat: boton.id});
-  const desplegar_el_chat = document.getElementById("tabla_mensajes");
+  let id_mensajes_display = id
+  const desplegar_el_chat = document.getElementById("tabla_mensajes_" + id_mensajes_display);
   if(desplegar_el_chat.style.display !== "none") {
     desplegar_el_chat.style.display = "none";
   }
   else {
     desplegar_el_chat.style.display = "";
   }
+  listar_var_2 = `
+  <h2>Chat con</h2>
+                         <ul class="list-unstyled"> 
+                          <li id="tabla_mensajes_2" style="display: none">
+                                                  
+                          </li>  `
+  listar_var_2 += `<li class="bg-white mb-3">
+                      <div class="form-outline">
+                        <input type="text" id="mensaje" name="mensaje">
+                        <label class="form-label" for="textAreaExample2">Message</label>
+                      </div>
+                  </li>
+                  <h2> </h2>
+                  
+  <button type="button" class="btn btn-info btn-rounded float-end" onclick="emitMessage()">Send</button>
+  </ul>`
+
+  desplegar_el_chat.innerHTML = listar_var_2;
+
 } 
 
 
-
+/*
 function desplegarMensajes(){
   const ulMensajes = document.getElementById("tabla_mensajes");
   let listar_var_2 = "";
@@ -318,7 +347,7 @@ function desplegarMensajes(){
 
     ulMensajes.innerHTML = listar_var_2;
 
-}
+}*/
 
 function getMessageContent() {
   return document.getElementById("mensaje").value
@@ -338,8 +367,7 @@ socket.on("server-message", data => {
 
 function mandarMensaje(getMensaje, getUser) {
   const message_ = document.getElementById("tabla_mensajes_2");
-  console.log("mensajee: ", getMensaje);
-  
+
   let listar_var_3 = "";
   listar_var_3 = `   
   <div class="card w-100">

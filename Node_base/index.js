@@ -217,12 +217,10 @@ io.on("connection", (socket) => {
     socket.join(idchat);
     req.session.id_chat = idchat;
   });
-  
+  // VER SOCKET /////////////////////////////////////////
 });
 /*
 socket.on('guardar_mensaje', data => {
-
-
 
 }) 
 */
