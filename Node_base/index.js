@@ -132,16 +132,14 @@ app.get("/logout", (req, res) => {
 app.put('/cargar_chat', async function(req, res) {
   let usuario_logueado = req.session.Dato;
 
-  let usuarios_chats= await MySQL.realizarQuery(`SELECT MC_usuarioschats.id_chat, MC_chats.nombre_receptor, MC_contactos.user_contacto
+  let usuarios_chats= await MySQL.realizarQuery(`SELECT MC_usuarioschats.id, MC_chats.nombre_receptor, MC_contactos.user_contacto
   FROM MC_usuarioschats
   INNER JOIN MC_chats ON MC_usuarioschats.id_chat = MC_chats.id_chat
-  INNER JOIN MC_contactos ON MC_usuarioschats.id_contacto = MC_contactos.id_contacto
-  WHERE MC_contactos.user_contacto = "${usuario_logueado}";`)
+  INNER JOIN MC_contactos ON MC_usuarioschats.id_contacto = MC_contactos.id_contacto`)
     //Chequeo el largo del vector a ver si tiene datos
     if (usuarios_chats.length > 0) {
         //Armo un objeto para responder
         console.log("true_put_chat");
-        console.log(usuarios_chats)
         res.send({validar: true, respuesta: {usuarios_chats}, usuario_: {usuario_logueado}})    
     }
     else{
@@ -155,13 +153,32 @@ app.put('/verify_Email', async function(req, res) {
   let verificarMail = req.body.mail
   console.log("Soy un pedido PUT /verify_Email", req.body); //En req.body vamos a obtener el objeto con los parámetros enviados desde el frontend por método PUT
   //Consulto en la bdd de la existencia del usuario
-  let verificacion = await MySQL.realizarQuery(`SELECT user_contacto FROM MC_contactos WHERE user_contacto = "${verificarMail}"`)
+  let verificacion_email = await MySQL.realizarQuery(`SELECT user_contacto FROM MC_contactos WHERE user_contacto = "${verificarMail}"`)
   //Chequeo el largo del vector a ver si tiene datos "${verificarMail}"
-  console.log("verificacion", verificacion)
   let id_contacto_logueado = await MySQL.realizarQuery(`SELECT id_contacto FROM MC_contactos WHERE user_contacto = "${req.session.Dato}"`);
-  if (verificacion.length > 0) {
-      //Armo un objeto para responder
+  console.log(id_contacto_logueado[0].id_contacto)
+  if (verificacion_email.length > 0) {
       console.log("true_put");
+      let verificar_id_chat = await MySQL.realizarQuery(`SELECT MC_usuarioschats.id as id_usuarioschats
+      FROM MC_usuarioschats 
+      INNER JOIN MC_chats ON MC_usuarioschats.id_chat = MC_chats.id_chat 
+      INNER JOIN MC_contactos ON MC_usuarioschats.id_contacto = MC_contactos.id_contacto 
+      WHERE MC_chats.nombre_receptor = "${req.session.Dato}" AND MC_contactos.user_contacto = "${verificarMail}"`);
+    if (verificar_id_chat.length > 0) {
+      let verificacion = verificar_id_chat;
+      console.log("estoy en quito");
+      res.send({validar: true, respuesta: {verificacion}}) 
+    } else {
+        let chat_nuevo = await MySQL.realizarQuery(`INSERT INTO MC_chats (nombre_receptor) VALUES ("${verificarMail}"); `);
+        let verificar_id_chat_3 = await MySQL.realizarQuery(`SELECT id_chat FROM MC_chats WHERE nombre_receptor = "${verificarMail}"`)
+        let carga_chats_usuario = await MySQL.realizarQuery(`INSERT INTO MC_usuarioschats (id_contacto, id_chat) VALUES ("${id_contacto_logueado[0].id_contacto}", "${verificar_id_chat_3[0].id_chat}"); `);
+        let verificar_id_chat_4 = await MySQL.realizarQuery(`SELECT MAX(MC_usuarioschats.id) as id_usuarioschats
+        FROM MC_usuarioschats`);
+        let verificacion = verificar_id_chat_4;
+        console.log("estoy en cuba");
+        res.send({validar: true, respuesta: {verificacion}})   
+    }
+      /*
       let verificar_id_chat_2 = await MySQL.realizarQuery(`SELECT MC_usuarioschats.id FROM MC_usuarioschats INNER JOIN MC_chats ON MC_usuarioschats.id_chat = MC_chats.id_chat WHERE MC_usuarioschats.id_contacto = "${id_contacto_logueado[0].id_contacto}" AND MC_chats.nombre_receptor = "${verificarMail}"`)
       //let verificar_id_chat = await MySQL.realizarQuery(`SELECT id_chat FROM MC_chats WHERE nombre_receptor = "${verificarMail}"`)
       if(verificar_id_chat_2.length == 0) {
@@ -174,8 +191,7 @@ app.put('/verify_Email', async function(req, res) {
         console.log("no se hizo el push del chat a sql");
         return 0;   
       }
-      
-      res.send({validar: true, respuesta: verificacion})    
+      */ 
   }
   else{
       console.log("false_put");

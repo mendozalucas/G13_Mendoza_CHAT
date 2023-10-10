@@ -124,7 +124,7 @@ async function fetchChats(){
     } 
     else {
       /* recorrer respuesta y armar la tabla  */
-      cargarChats(result.respuesta.usuarios_chats);
+      cargarChats(result.respuesta.usuarios_chats, result.usuario_);
       desplegarMensajes()
       //document.getElementById("form_login").submit()
     }
@@ -133,8 +133,10 @@ async function fetchChats(){
   }
 }
 
-function cargarChats(usuarios_chats) {
+function cargarChats(usuarios_chats, usuario_) {
   const tablaChats_creados = document.getElementById("desplegar_chats_creados");
+  let user_logueado = usuario_.usuario_logueado;
+
   let listar_var_4 = ""; 
   for (let u = 0; u < usuarios_chats.length; u++) {
     listar_var_4 +=
@@ -145,20 +147,36 @@ function cargarChats(usuarios_chats) {
           <ul class="list-unstyled mb-0">
               <li class="p-2 border-bottom" style="background-color: #eee;">
                   <a href="#!" class="d-flex justify-content-between">
-                  <div class="d-flex flex-row">
-                      <div class="pt-1">
-                        <button class="fw-bold mb-0" onclick="cambiarChat(this)" id="${usuarios_chats[u].id_chat}">${usuarios_chats[u].nombre_receptor}</button> 
+                  <div class="d-flex flex-row">`
+                  if (usuarios_chats[u].nombre_receptor == user_logueado) {
+                    listar_var_4 +=
+                  `<div class="pt-1">
+                        <button class="fw-bold mb-0" onclick="cambiarChat(this)" id="${usuarios_chats[u].id}">YOU: ${usuarios_chats[u].nombre_receptor}</button> 
                       </div>
-                  </div>
-                  <div class="pt-1">
-                    <p class="small text-muted mb-1" id="${usuarios_chats[u].id_chat}" >Chat id: ${usuarios_chats[u].id_chat}</p>
-                  </a>
-              </li>
-          </ul>
+                      </div>
+                    <div class="pt-1">
+                        <p class="small text-muted mb-1" id="${usuarios_chats[u].id}" >Chat id: ${usuarios_chats[u].id}</p>
+                      </a>
+                  </li>
+              </ul>
+    
+          </div>
+      </div>`
+                  }else {
+                    listar_var_4 +=
+                    `<div class="pt-1">
+                          <button class="fw-bold mb-0" onclick="cambiarChat(this)" id="${usuarios_chats[u].id}">${usuarios_chats[u].nombre_receptor}</button> 
+                        </div>
+                      </div>
+                    <div class="pt-1">
+                      <p class="small text-muted mb-1" id="${usuarios_chats[u].id}" >Chat id: ${usuarios_chats[u].id}</p>
+                    </a>
+                </li>
+            </ul>
 
-      </div>
-  </div>
-  `
+        </div>
+    </div>`
+                  }
   }
   tablaChats_creados.innerHTML = listar_var_4;
 }
@@ -205,9 +223,10 @@ async function adminUsuarios(data){
     } 
     else {
       /* recorrer respuesta y armar la tabla  */
-      crearChat(result.respuesta[0].user_contacto);
+      console.log(result.respuesta.verificacion)
+      crearChat(result.respuesta.verificacion);
       desplegarMensajes()
-      //document.getElementById("form_login").submit()
+      //document.getElementById("form_login").submit() [0].user_contacto
     }
 
   } catch (error) {
@@ -219,9 +238,10 @@ function getApodo() {
   return document.getElementById("apodo").value;
 }
 
-function crearChat(user) {
+function crearChat(verificacion) {
   const tablaChats = document.getElementById("tabla_chat");
   let apodo_ = getApodo();
+  let id_chat = verificacion[0].id_usuarioschats;
   let listar_var = "";
   if(tablaChats.style.display !== "none") {
     tablaChats.innerHTML = "";
@@ -238,9 +258,12 @@ function crearChat(user) {
                   <a href="#!" class="d-flex justify-content-between">
                   <div class="d-flex flex-row">
                       <div class="pt-1">
-                      <button class="fw-bold mb-0" onclick="cambiarChat(this)">${apodo_}</button>
+                      <button class="fw-bold mb-0" onclick="cambiarChat(this)" id="${id_chat}">${apodo_}</button>
                       </div>
                   </div>
+                  <div class="pt-1">
+                    <p class="small text-muted mb-1" id="${id_chat}" >Chat id: ${id_chat}</p>
+                  </a>
                   </a>
               </li>
           </ul>
@@ -256,12 +279,12 @@ function cambiarChat(boton) {
   let n = 1
   console.log(boton.id)
   socket.emit("join-chat", { idchat: boton.id});
-  const registed = document.getElementById("tabla_mensajes");
-  if(registed.style.display !== "none") {
-      registed.style.display = "none";
+  const desplegar_el_chat = document.getElementById("tabla_mensajes");
+  if(desplegar_el_chat.style.display !== "none") {
+    desplegar_el_chat.style.display = "none";
   }
   else {
-      registed.style.display = "";
+    desplegar_el_chat.style.display = "";
   }
 } 
 
