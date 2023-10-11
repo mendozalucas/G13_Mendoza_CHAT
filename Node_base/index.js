@@ -37,7 +37,7 @@ const io = require('socket.io')(server);
 const sessionMiddleware = session({
     secret: 'sararasthastka',
     resave: true,
-    saveUnintialized: false,
+    saveUninitialized: false,
 });
 
 app.use(sessionMiddleware);
@@ -104,8 +104,9 @@ app.post("/login", async (req, res) => {
       email,
       password,
     });
+    req.session.Id = userCredential.user.uid;
     req.session.Dato = req.body.email;
-    console.log("usuario logueado: ", req.session.Dato);
+    console.log("usuario logueado: ", req.session.Dato, "con su respectiva ID", req.session.Id);
     // Aquí puedes redirigir al usuario a la página que desees después del inicio de sesión exitoso
 
     res.redirect("/chat");
@@ -203,26 +204,26 @@ app.put('/verify_Email', async function(req, res) {
 io.on("connection", (socket) => {
   const req = socket.request;
   
-
   socket.on('incoming-message', data =>{
     console.log('INCOMING MESSAGE: ', data);
     //io.emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });
     console.log('CHAT: ', req.session.id_chat);
-    socket.join(req.session.id_chat);
+    var today = new Date();
+    var now = today.toLocaleString();
+    let carga_chats_usuario = MySQL.realizarQuery(`INSERT INTO MC_mensajes (id_contacto, id, mensaje, fecha) 
+    VALUES ("${req.session.Id}", "${req.session.id_chat}", "${data.mensaje}", "${now}"); `); //ver sintax
     io.to(req.session.id_chat).emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });
   });
 
-  socket.on('join-chat', idchat =>{
-    console.log('INCOMING IDCHAT', idchat);
-    socket.join(idchat);
-    req.session.id_chat = idchat;
+  socket.on('join-chat', data =>{
+    console.log('INCOMING IDCHAT', data);
+    socket.join(data.idchat);
+    req.session.id_chat = data.idchat; // CUIDADO CON LOS OBJETOS
   });
-  
+  // VER SOCKET /////////////////////////////////////////
 });
 /*
 socket.on('guardar_mensaje', data => {
-
-
 
 }) 
 */
