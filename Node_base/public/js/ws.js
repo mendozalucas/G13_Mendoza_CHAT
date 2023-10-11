@@ -13,6 +13,7 @@ function funcionPruebaa() {
     socket.emit("incoming-message", { mensaje: "PRUEBA"});
 }
 
+// mando el mensaje al index
 function emitMessage() {
     let mensaje = getMessageContent()
     socket.emit("incoming-message", { mensaje: mensaje});

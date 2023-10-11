@@ -156,8 +156,8 @@ app.put('/verify_Email', async function(req, res) {
   //Consulto en la bdd de la existencia del usuario
   let verificacion_email = await MySQL.realizarQuery(`SELECT user_contacto FROM MC_contactos WHERE user_contacto = "${verificarMail}"`)
   //Chequeo el largo del vector a ver si tiene datos "${verificarMail}"
-  let id_contacto_logueado = await MySQL.realizarQuery(`SELECT id_contacto FROM MC_contactos WHERE user_contacto = "${req.session.Dato}"`);
-  console.log(id_contacto_logueado[0].id_contacto)
+  //let id_contacto_logueado = await MySQL.realizarQuery(`SELECT id_contacto FROM MC_contactos WHERE user_contacto = "${req.session.Dato}"`);
+  //console.log(id_contacto_logueado[0].id_contacto)
   if (verificacion_email.length > 0) {
       console.log("true_put");
       let verificar_id_chat = await MySQL.realizarQuery(`SELECT MC_usuarioschats.id as id_usuarioschats
@@ -172,7 +172,7 @@ app.put('/verify_Email', async function(req, res) {
     } else {
         let chat_nuevo = await MySQL.realizarQuery(`INSERT INTO MC_chats (nombre_receptor) VALUES ("${verificarMail}"); `);
         let verificar_id_chat_3 = await MySQL.realizarQuery(`SELECT id_chat FROM MC_chats WHERE nombre_receptor = "${verificarMail}"`)
-        let carga_chats_usuario = await MySQL.realizarQuery(`INSERT INTO MC_usuarioschats (id_contacto, id_chat) VALUES ("${id_contacto_logueado[0].id_contacto}", "${verificar_id_chat_3[0].id_chat}"); `);
+        let carga_chats_usuario = await MySQL.realizarQuery(`INSERT INTO MC_usuarioschats (id_contacto, id_chat) VALUES ("${req.session.Id}", "${verificar_id_chat_3[0].id_chat}"); `);
         let verificar_id_chat_4 = await MySQL.realizarQuery(`SELECT MAX(MC_usuarioschats.id) as id_usuarioschats
         FROM MC_usuarioschats`);
         let verificacion = verificar_id_chat_4;
@@ -210,7 +210,7 @@ io.on("connection", (socket) => {
     console.log('CHAT: ', req.session.id_chat);
     var today = new Date();
     var now = today.toLocaleString();
-    let carga_chats_usuario = MySQL.realizarQuery(`INSERT INTO MC_mensajes (id_contacto, id, mensaje, fecha) 
+    let carga_chats_usuario = MySQL.realizarQuery(`INSERT INTO MC_mensajes (id_contacto, id, mensaje, fecha_hora) 
     VALUES ("${req.session.Id}", "${req.session.id_chat}", "${data.mensaje}", "${now}"); `); //ver sintax
     io.to(req.session.id_chat).emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });
   });

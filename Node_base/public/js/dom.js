@@ -297,7 +297,7 @@ function cambiarChat(boton, id) {
     desplegar_el_chat.style.display = "";
   }
   listar_var_2 = `
-  <h2>Chat con</h2>
+  <h4>Chat</h4>
                          <ul class="list-unstyled"> 
                           <li id="tabla_mensajes_2" style="display: none">
                                                   
@@ -316,38 +316,6 @@ function cambiarChat(boton, id) {
   desplegar_el_chat.innerHTML = listar_var_2;
 
 } 
-
-
-/*
-function desplegarMensajes(){
-  const ulMensajes = document.getElementById("tabla_mensajes");
-  let listar_var_2 = "";
-  if(ulMensajes.style.display !== "none") {
-    ulMensajes.innerHTML = "";
-  }
-  else {
-    ulMensajes.style.display = "";
-  }
-  listar_var_2 = `
-  <h2>Chat con</h2>
-                         <ul class="list-unstyled">
-                          <li id="tabla_mensajes_2" style="display: none">
-                                                  
-                          </li>  `
-  listar_var_2 += `<li class="bg-white mb-3">
-                      <div class="form-outline">
-                        <input type="text" id="mensaje" name="mensaje">
-                        <label class="form-label" for="textAreaExample2">Message</label>
-                      </div>
-                  </li>
-                  <h2> </h2>
-                  
-  <button type="button" class="btn btn-info btn-rounded float-end" onclick="emitMessage()">Send</button>
-  </ul>`
-
-    ulMensajes.innerHTML = listar_var_2;
-
-}*/
 
 function getMessageContent() {
   return document.getElementById("mensaje").value
