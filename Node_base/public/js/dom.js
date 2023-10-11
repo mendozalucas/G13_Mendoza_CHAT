@@ -368,6 +368,8 @@ socket.on("server-message", data => {
 function mandarMensaje(getMensaje, getUser) {
   const message_ = document.getElementById("tabla_mensajes_2");
 
+  console.log("Funcion mandarMensaje", getMensaje, getUser);
+
   let listar_var_3 = "";
   listar_var_3 = `   
   <div class="card w-100">
