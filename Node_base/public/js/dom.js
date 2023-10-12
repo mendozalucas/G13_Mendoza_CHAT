@@ -152,7 +152,7 @@ function cargarChats(usuarios_chats, usuario_) {
                       if (usuarios_chats[u].nombre_receptor == user_logueado) {
                         listar_var_4 +=
                           `<div class="pt-1">
-                                <button class="fw-bold mb-0" onclick="cambiarChat(this, ${usuarios_chats[u].id})" id="${usuarios_chats[u].id}">${usuarios_chats[u].user_contacto}</button> 
+                                <button class="fw-bold mb-0" onclick="cambiarChat(this, ${usuarios_chats[u].id}, '${usuarios_chats[u].user_contacto}')" id="${usuarios_chats[u].id}">${usuarios_chats[u].user_contacto}</button> 
                               </div>
                               </div>
                             <div class="pt-1">
@@ -168,7 +168,7 @@ function cargarChats(usuarios_chats, usuario_) {
                       } else {
                         listar_var_4 +=
                         `<div class="pt-1">
-                              <button class="fw-bold mb-0" onclick="cambiarChat(this, ${usuarios_chats[u].id})" id="${usuarios_chats[u].id}">${usuarios_chats[u].nombre_receptor}</button> 
+                              <button class="fw-bold mb-0" onclick="cambiarChat(this, ${usuarios_chats[u].id}, '${usuarios_chats[u].nombre_receptor}')" id="${usuarios_chats[u].id}">${usuarios_chats[u].nombre_receptor}</button> 
                             </div>
                           </div>
                         <div class="pt-1">
@@ -285,9 +285,9 @@ function crearChat(verificacion) {
 
 
 //cambiarchat debe recibir el parametro usuario
-function cambiarChat(boton, id_chat_2) {
+
+function cambiarChat(boton, id_chat_2, usuario_upload) {
   let id_mensajes_display = id_chat_2;
-  //let id_usuario_display = id_usuario;
   const desplegar_el_chat = document.getElementById("tabla_mensajes_" + id_mensajes_display);
   if(desplegar_el_chat.style.display !== "none") {
     desplegar_el_chat.style.display = "none";
@@ -297,8 +297,18 @@ function cambiarChat(boton, id_chat_2) {
     console.log("abierto")
     console.log(boton.id)
     socket.emit("join-chat", { idchat: boton.id});
-    //emitUpload(id_mensajes_display, id_usuario_display)
+    emitUpload(id_mensajes_display, usuario_upload)
   }// usar for para cargar los mensajes
+  socket.on("messages-upload", data => {//HACER FOR PARA LOS MENSAJES 
+    console.log("Me llego del servidor", data.mensaje);
+    console.log("Me llego del servidor", data.user_contacto);
+    let getMensaje_upload = data.mensaje;
+    let getUser_upload = data.user;
+  });
+  /*
+  for (let i = 0; i < data.length; i++) {
+    
+  }*/
   listar_var_2 = `
   <h4>Chat</h4>
                          <ul class="list-unstyled"> 
@@ -323,9 +333,6 @@ socket.on("connect", () => {
 });
 
 socket.on("server-message", data => {
-  console.log("Me llego del servidor", data.mensaje);
-  console.log("Me llego del servidor", data.user);
-  console.log("Me llego del servidor", data.chat);
   let getMensaje = data.mensaje;
   let getUser = data.user;
   let getChat = data.chat
