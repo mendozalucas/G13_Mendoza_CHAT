@@ -12,12 +12,12 @@ socket.on("server-message", data => {
 function funcionPruebaa() {
     socket.emit("incoming-message", { mensaje: "PRUEBA"});
 }
-/*
+
 function emitMessage(id) {
     const el_mensaje = document.getElementById("mensaje" + id).value;
     let mensaje = el_mensaje;
     socket.emit("incoming-message", { mensaje: mensaje});
-}*/
+}
 /*
 function emitUpload(id_chat_2, id_usuario_) {
     const id_chat_upload = id_chat_2;

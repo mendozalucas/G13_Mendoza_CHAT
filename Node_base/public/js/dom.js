@@ -317,11 +317,6 @@ function cambiarChat(boton, id_chat_2) {
   </ul>`
   desplegar_el_chat.innerHTML = listar_var_2;
 } 
-/*
-function getMessageContent(id) {
-  const el_mensaje = document.getElementById("mensaje" + id).value;
-  return el_mensaje
-}*/
 
 socket.on("connect", () => {
     console.log("Me conecté a WS");
