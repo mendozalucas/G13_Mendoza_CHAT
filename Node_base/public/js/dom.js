@@ -138,64 +138,62 @@ function cargarChats(usuarios_chats, usuario_) {
   let length_chats = usuarios_chats.length
   let listar_var_4 = ""; 
   for (let u = 0; u < usuarios_chats.length; u++) {
-    listar_var_4 +=
-    `
-  <div class="card">
-      <div class="card-body">
-
-          <ul class="list-unstyled mb-0">
-              <li class="p-2 border-bottom" style="background-color: #eee;">
-                  <a href="#!" class="d-flex justify-content-between">
-                  <div class="d-flex flex-row">`
-                  if (usuarios_chats[u].nombre_receptor == user_logueado) {
-                    listar_var_4 +=
-                  `<div class="pt-1">
-                        <button class="fw-bold mb-0" onclick="cambiarChat(this, ${usuarios_chats[u].id})" id="${usuarios_chats[u].id}">YOU: ${usuarios_chats[u].nombre_receptor}</button> 
-                      </div>
-                      </div>
-                    <div class="pt-1">
-                        <p class="small text-muted mb-1" id="${usuarios_chats[u].id}" >Chat id: ${usuarios_chats[u].id}</p>
-                      </a>
-                  </li>
-              </ul>
+    if(user_logueado == usuarios_chats[u].nombre_receptor || user_logueado == usuarios_chats[u].user_contacto) {
+      listar_var_4 +=
     
-          </div>
-      </div>`
-                  }else {
-                    listar_var_4 +=
-                    `<div class="pt-1">
-                          <button class="fw-bold mb-0" onclick="cambiarChat(this, ${usuarios_chats[u].id})" id="${usuarios_chats[u].id}">${usuarios_chats[u].nombre_receptor}</button> 
-                        </div>
-                      </div>
-                    <div class="pt-1">
-                      <p class="small text-muted mb-1" id="${usuarios_chats[u].id}" >Chat id: ${usuarios_chats[u].id}</p>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    `
-    }
-    listar_var_4 += `<div class="column">
-                      <ul class="list-unstyled">
-                          <li id="tabla_mensajes_${usuarios_chats[u].id}" style="display: none">
-                                                  
+      `
+      <div class="card">
+          <div class="card-body">
+  
+              <ul class="list-unstyled mb-0">
+                  <li class="p-2 border-bottom" style="background-color: #eee;">
+                      <a href="#!" class="d-flex justify-content-between">
+                      <div class="d-flex flex-row">`
+                      if (usuarios_chats[u].nombre_receptor == user_logueado) {
+                        listar_var_4 +=
+                          `<div class="pt-1">
+                                <button class="fw-bold mb-0" onclick="cambiarChat(this, ${usuarios_chats[u].id})" id="${usuarios_chats[u].id}">${usuarios_chats[u].user_contacto}</button> 
+                              </div>
+                              </div>
+                            <div class="pt-1">
+                                <p class="small text-muted mb-1" id="${usuarios_chats[u].id}" >Chat id: ${usuarios_chats[u].id}</p>
+                              </a>
                           </li>
-                  </div>`
+                      </ul>
+            
+                  </div>
+              </div>
+                        `
+                        listar_var_4
+                      } else {
+                        listar_var_4 +=
+                        `<div class="pt-1">
+                              <button class="fw-bold mb-0" onclick="cambiarChat(this, ${usuarios_chats[u].id})" id="${usuarios_chats[u].id}">${usuarios_chats[u].nombre_receptor}</button> 
+                            </div>
+                          </div>
+                        <div class="pt-1">
+                          <p class="small text-muted mb-1" id="${usuarios_chats[u].id}" >Chat id: ${usuarios_chats[u].id}</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+      `
+      }
+      listar_var_4 += `<div class="column">
+                        <ul class="list-unstyled">
+                            <li id="tabla_mensajes_${usuarios_chats[u].id}" style="display: none">
+                                                    
+                            </li>
+                    </div>`
+    }
+  }
+  if (listar_var_4 == "") {
+    listar_var_4 += `<p> no hay chats previos </p>`
   }
   tablaChats_creados.innerHTML = listar_var_4;
 }
-/*
-function getbuttonID() {
-  const buttons = document.getElementsByTagName("button");
-  ​
-  const buttonPressed = e => { 
-    let id_button= e.target.id;
-    console.log(buttonPressed);
-  }
-  return buttonPressed;
-}
-*/
+
 function fetcheado() {
   //Leo los datos del input
   let email_ = document.getElementById("verificar_mail").value;
@@ -207,6 +205,7 @@ function fetcheado() {
   }
   adminUsuarios(data)
 }
+
 async function adminUsuarios(data){
   console.log("soy admin usuarios", data)
   try {
@@ -276,82 +275,53 @@ function crearChat(verificacion) {
   </div>
   <div class="column">
     <ul class="list-unstyled">
-        <li id="tabla_mensajes_${id_chat}" style="display: none">
+        <li "id="tabla_mensajes_${id_chat}" style="display: none">
                                 
         </li>
-  </div>`
+  </div>
+  `
   tablaChats.innerHTML = listar_var;
 }
 
 
-
-function cambiarChat(boton, id) {
-  console.log(boton.id)
-  socket.emit("join-chat", { idchat: boton.id});
-  let id_mensajes_display = id
+//cambiarchat debe recibir el parametro usuario
+function cambiarChat(boton, id_chat_2) {
+  let id_mensajes_display = id_chat_2;
+  let id_usuario_display = id_usuario;
   const desplegar_el_chat = document.getElementById("tabla_mensajes_" + id_mensajes_display);
   if(desplegar_el_chat.style.display !== "none") {
     desplegar_el_chat.style.display = "none";
   }
   else {
     desplegar_el_chat.style.display = "";
-  }
+    console.log("abierto")
+    console.log(boton.id)
+    socket.emit("join-chat", { idchat: boton.id});
+    //emitUpload(id_mensajes_display, id_usuario_display)
+  }// usar for para cargar los mensajes
   listar_var_2 = `
-  <h2>Chat con</h2>
+  <h4>Chat</h4>
                          <ul class="list-unstyled"> 
-                          <li id="tabla_mensajes_2" style="display: none">
+                          <li id="tablamensajes${id_mensajes_display}" style="display: none">
                                                   
                           </li>  `
   listar_var_2 += `<li class="bg-white mb-3">
                       <div class="form-outline">
-                        <input type="text" id="mensaje" name="mensaje">
+                        <input type="text" id="mensaje${id_mensajes_display}" name="mensaje${id_mensajes_display}">
                         <label class="form-label" for="textAreaExample2">Message</label>
                       </div>
                   </li>
                   <h2> </h2>
                   
-  <button type="button" class="btn btn-info btn-rounded float-end" onclick="emitMessage()">Send</button>
+  <button type="button" class="btn btn-info btn-rounded float-end" onclick="emitMessage(${id_mensajes_display})">Send</button>
   </ul>`
-
   desplegar_el_chat.innerHTML = listar_var_2;
-
 } 
-
-
 /*
-function desplegarMensajes(){
-  const ulMensajes = document.getElementById("tabla_mensajes");
-  let listar_var_2 = "";
-  if(ulMensajes.style.display !== "none") {
-    ulMensajes.innerHTML = "";
-  }
-  else {
-    ulMensajes.style.display = "";
-  }
-  listar_var_2 = `
-  <h2>Chat con</h2>
-                         <ul class="list-unstyled">
-                          <li id="tabla_mensajes_2" style="display: none">
-                                                  
-                          </li>  `
-  listar_var_2 += `<li class="bg-white mb-3">
-                      <div class="form-outline">
-                        <input type="text" id="mensaje" name="mensaje">
-                        <label class="form-label" for="textAreaExample2">Message</label>
-                      </div>
-                  </li>
-                  <h2> </h2>
-                  
-  <button type="button" class="btn btn-info btn-rounded float-end" onclick="emitMessage()">Send</button>
-  </ul>`
-
-    ulMensajes.innerHTML = listar_var_2;
-
+function getMessageContent(id) {
+  const el_mensaje = document.getElementById("mensaje" + id).value;
+  return el_mensaje
 }*/
-
-function getMessageContent() {
-  return document.getElementById("mensaje").value
-}
 
 socket.on("connect", () => {
     console.log("Me conecté a WS");
@@ -360,16 +330,15 @@ socket.on("connect", () => {
 socket.on("server-message", data => {
   console.log("Me llego del servidor", data.mensaje);
   console.log("Me llego del servidor", data.user);
+  console.log("Me llego del servidor", data.chat);
   let getMensaje = data.mensaje;
   let getUser = data.user;
-  mandarMensaje(getMensaje, getUser);
+  let getChat = data.chat
+  mandarMensaje(getMensaje, getUser, getChat);
 });
 
-function mandarMensaje(getMensaje, getUser) {
-  const message_ = document.getElementById("tabla_mensajes_2");
-
-  console.log("Funcion mandarMensaje", getMensaje, getUser);
-
+function mandarMensaje(getMensaje, getUser, getChat) {
+  const message_ = document.getElementById("tablamensajes" + getChat);
   let listar_var_3 = "";
   listar_var_3 = `   
   <div class="card w-100">

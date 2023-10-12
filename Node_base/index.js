@@ -210,10 +210,22 @@ io.on("connection", (socket) => {
     console.log('CHAT: ', req.session.id_chat);
     var today = new Date();
     var now = today.toLocaleString();
-    let carga_chats_usuario = MySQL.realizarQuery(`INSERT INTO MC_mensajes (id_contacto, id, mensaje, fecha) 
+    let carga_chats_usuario = MySQL.realizarQuery(`INSERT INTO MC_mensajes (id_contacto, id, mensaje, fecha_hora) 
     VALUES ("${req.session.Id}", "${req.session.id_chat}", "${data.mensaje}", "${now}"); `); //ver sintax
-    io.to(req.session.id_chat).emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });
+    io.to(req.session.id_chat).emit("server-message", { mensaje: data.mensaje, user: req.session.Dato, chat: req.session.id_chat });
   });
+  /*
+  socket.on('upload-messages', (chat_upload, user_upload) =>{
+    console.log("a", chat_upload);
+    console.log("b", user_upload);
+    let vector_mensajes = MySQL.realizarQuery(`
+    SELECT MC_mensajes.mensaje, MC_contactos.user_contacto
+    FROM MC_mensajes
+    INNER JOIN MC_usuarioschats ON MC_mensajes.id = MC_usuarioschats.id
+    INNER JOIN MC_contactos ON MC_usuarioschats.id_contacto = MC_contactos.id_contacto  
+    WHERE MC_contactos.user_contacto = "${user_upload}";`)
+    console.log("c", vector_mensajes) // c me tira pending, a el objeto completo y b indefinido
+  }) */ 
 
   socket.on('join-chat', data =>{
     console.log('INCOMING IDCHAT', data);

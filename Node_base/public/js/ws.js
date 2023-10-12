@@ -12,11 +12,18 @@ socket.on("server-message", data => {
 function funcionPruebaa() {
     socket.emit("incoming-message", { mensaje: "PRUEBA"});
 }
-
-function emitMessage() {
-    let mensaje = getMessageContent()
+/*
+function emitMessage(id) {
+    const el_mensaje = document.getElementById("mensaje" + id).value;
+    let mensaje = el_mensaje;
     socket.emit("incoming-message", { mensaje: mensaje});
-}
+}*/
+/*
+function emitUpload(id_chat_2, id_usuario_) {
+    const id_chat_upload = id_chat_2;
+    const id_usuario_upload = id_usuario_;
+    socket.emit("upload-messages", {upload_chat: id_chat_upload, upload_usuario: id_usuario_upload})
+}*/
 /*
 io.on("connection", socket => {
 
