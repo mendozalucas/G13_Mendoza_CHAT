@@ -287,7 +287,7 @@ function crearChat(verificacion) {
 //cambiarchat debe recibir el parametro usuario
 function cambiarChat(boton, id_chat_2) {
   let id_mensajes_display = id_chat_2;
-  let id_usuario_display = id_usuario;
+  //let id_usuario_display = id_usuario;
   const desplegar_el_chat = document.getElementById("tabla_mensajes_" + id_mensajes_display);
   if(desplegar_el_chat.style.display !== "none") {
     desplegar_el_chat.style.display = "none";
