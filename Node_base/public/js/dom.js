@@ -180,7 +180,7 @@ function cargarChats(usuarios_chats, usuario_) {
         </div>
       `
       }
-      listar_var_4 += `<div class="column">
+      listar_var_4 += `<div class="sidebar">
                         <ul class="list-unstyled">
                             <li id="tabla_mensajes_${usuarios_chats[u].id}" style="display: none">
                                                     
@@ -335,11 +335,25 @@ socket.on("server-message", data => {
 function mandarMensaje(getMensaje, getUser, getChat) {
   const message_ = document.getElementById("tablamensajes" + getChat);
   let listar_var_3 = "";
+  var today_2 = new Date();
+  let contHoras = today_2.getHours()
+  let contMinutos = today_2.getMinutes()
+  if(contHoras.toString().length == 1) {
+    var hora = "0" + today_2.getHours();
+  } else if (contHoras.toString().length == 2){
+    var hora = today_2.getHours();
+  }
+  if(contMinutos.toString().length == 1) {
+    var minuto = "0" + today_2.getMinutes();
+  } else if (contMinutos.toString().length == 2){
+    var minuto = today_2.getMinutes();
+  }
+  var hora_minutos = hora + ":" + minuto;
   listar_var_3 = `   
   <div class="card w-100">
     <div class="card-header d-flex justify-content-between p-3">
         <p class="fw-bold mb-0">${getUser}</p>
-        <p class="text-muted small mb-0"><i class="far fa-clock"></i>Just now</p>
+        <p class="text-muted small mb-0"><i class="far fa-clock"></i>${hora_minutos}</p>
     </div>
     <div class="card-body">
         <p class="mb-0">

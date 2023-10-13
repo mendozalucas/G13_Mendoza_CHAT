@@ -231,7 +231,15 @@ select {
 .gris{
   background-color: grey;
 }
-/*
-#tabla_mensajes {
-  margin-left: 350px;
-}*/
+
+#contenedor {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+#principal {
+  width: 75%;
+}
+#sidebar {
+  width: 25%;
+}
