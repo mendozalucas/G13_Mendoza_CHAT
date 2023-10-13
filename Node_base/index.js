@@ -215,16 +215,16 @@ io.on("connection", (socket) => {
     io.to(req.session.id_chat).emit("server-message", { mensaje: data.mensaje, user: req.session.Dato, chat: req.session.id_chat });
   });
   /*
-  socket.on('upload-messages', (chat_upload, user_upload) =>{
+  socket.on('upload-messages', async function(chat_upload, user_upload) {
     console.log("a", chat_upload);
     console.log("b", user_upload);
-    let vector_mensajes = MySQL.realizarQuery(`
+    let vector_mensajes = await MySQL.realizarQuery(`
     SELECT MC_mensajes.mensaje, MC_contactos.user_contacto
     FROM MC_mensajes
     INNER JOIN MC_usuarioschats ON MC_mensajes.id = MC_usuarioschats.id
     INNER JOIN MC_contactos ON MC_usuarioschats.id_contacto = MC_contactos.id_contacto  
     WHERE MC_contactos.user_contacto = "${user_upload}";`)
-    console.log("c", vector_mensajes) // c me tira pending, a el objeto completo y b indefinido
+    console.log("c", vector_mensajes) // 
   }) */ 
 
   socket.on('join-chat', data =>{

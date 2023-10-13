@@ -231,15 +231,3 @@ select {
 .gris{
   background-color: grey;
 }
-
-#contenedor {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-#principal {
-  width: 75%;
-}
-#sidebar {
-  width: 25%;
-}
