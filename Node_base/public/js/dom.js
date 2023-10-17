@@ -238,13 +238,13 @@ async function adminUsuarios(data){
   }
 }
 
-function getApodo() {
-  return document.getElementById("apodo").value;
+function getMail() {
+  return document.getElementById("verificar_mail").value;
 }
 
 function crearChat(verificacion) {
   const tablaChats = document.getElementById("tabla_chat");
-  let apodo_ = getApodo();
+  let mail_ = getMail();
   let id_chat = verificacion[0].id_usuarioschats;
   let listar_var = "";
   if(tablaChats.style.display !== "none") {
@@ -262,7 +262,7 @@ function crearChat(verificacion) {
                   <a href="#!" class="d-flex justify-content-between">
                   <div class="d-flex flex-row">
                       <div class="pt-1">
-                      <button class="fw-bold mb-0" onclick="cambiarChat(this, ${id_chat})" id="${id_chat}">${apodo_}</button>
+                      <button class="fw-bold mb-0" onclick="cambiarChat(this, ${id_chat}, ${mail_})" id="${id_chat}">${mail_}</button>
                       </div>
                   </div>
                   <div class="pt-1">
@@ -299,34 +299,54 @@ function cambiarChat(boton, id_chat_2, usuario_upload) {
     socket.emit("join-chat", { idchat: boton.id});
     emitUpload(id_mensajes_display, usuario_upload)
   }// usar for para cargar los mensajes
-  socket.on("messages-upload", data => {//HACER FOR PARA LOS MENSAJES 
-    console.log("Me llego del servidor", data.mensaje);
-    console.log("Me llego del servidor", data.user_contacto);
-    let getMensaje_upload = data.mensaje;
-    let getUser_upload = data.user;
-  });
+
   /*
   for (let i = 0; i < data.length; i++) {
     
   }*/
-  listar_var_2 = `
-  <h4>Chat</h4>
-                         <ul class="list-unstyled"> 
-                          <li id="tablamensajes${id_mensajes_display}" style="display: none">
-                                                  
-                          </li>  `
-  listar_var_2 += `<li class="bg-white mb-3">
-                      <div class="form-outline">
-                        <input type="text" id="mensaje${id_mensajes_display}" name="mensaje${id_mensajes_display}">
-                        <label class="form-label" for="textAreaExample2">Message</label>
-                      </div>
-                  </li>
-                  <h2> </h2>
-                  
-  <button type="button" class="btn btn-info btn-rounded float-end" onclick="emitMessage(${id_mensajes_display})">Send</button>
-  </ul>`
-  desplegar_el_chat.innerHTML = listar_var_2;
-} 
+
+}   
+
+socket.on("messages-upload", data => {//HACER FOR PARA LOS MENSAJES 
+    const desplegar_el_chat = document.getElementById("tabla_mensajes_" + data.vector[0].id);
+    let listar_var_2 = '';
+    console.log(data);
+    for (let i = 0; i < data.vector.length; i++) {
+      listar_var_2 += `<div class="card w-100">
+      <div class="card-header d-flex justify-content-between p-3">
+          <p class="fw-bold mb-0">${data.vector[i].user_contacto}</p>
+          <p class="text-muted small mb-0"><i class="far fa-clock"></i>Just now</p>
+      </div>
+      <div class="card-body">
+          <p class="mb-0">
+          ${data.vector[i].mensaje}
+          </p>
+      </div>
+    </div>
+    <div class="shadow p-3 mb-5 bg-white rounded">
+      <div id="allMessages">
+      </div>
+    </div>`
+    listar_var_2 += '</ul>'
+    }
+    listar_var_2 += `
+    <h4>Chat</h4>
+                           <ul class="list-unstyled"> 
+                            <li id="tablamensajes${data.vector[0].id}" style="display: none">
+                                                    
+                            </li>  `
+    listar_var_2 += `<li class="bg-white mb-3">
+                        <div class="form-outline">
+                          <input type="text" id="mensaje${data.vector[0].id}" name="mensaje${data.vector[0].id}">
+                          <label class="form-label" for="textAreaExample2">Message</label>
+                        </div>
+                    </li>
+                    <h2> </h2>
+                    
+    <button type="button" class="btn btn-info btn-rounded float-end" onclick="emitMessage(${data.vector[0].id})">Send</button>
+    </ul>`
+    desplegar_el_chat.innerHTML = listar_var_2;
+  });
 
 socket.on("connect", () => {
     console.log("Me conecté a WS");

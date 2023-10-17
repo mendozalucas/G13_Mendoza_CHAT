@@ -215,14 +215,20 @@ io.on("connection", (socket) => {
     io.to(req.session.id_chat).emit("server-message", { mensaje: data.mensaje, user: req.session.Dato, chat: req.session.id_chat });
   });
   
-  socket.on('upload-messages', async function(chat_upload, user_upload) {
+  socket.on('upload-messages', async function(chat_upload) {
     let vector_mensajes = await MySQL.realizarQuery(`
-    SELECT MC_mensajes.mensaje, MC_contactos.user_contacto
+    SELECT MC_mensajes.mensaje, MC_contactos.user_contacto, MC_usuarioschats.id
     FROM MC_mensajes
     INNER JOIN MC_usuarioschats ON MC_mensajes.id = MC_usuarioschats.id
     INNER JOIN MC_contactos ON MC_usuarioschats.id_contacto = MC_contactos.id_contacto  
-    WHERE MC_contactos.user_contacto = "${chat_upload.upload_usuario}";`)
-    socket.emit("messages-upload", { vector: vector_mensajes})
+    WHERE MC_mensajes.id = "${chat_upload.upload_chat}";`)
+    if (vector_mensajes.length == 0) {
+      //Crear nuevo chat, insert into
+      socket.emit("messages-upload", { vector: vector_mensajes})
+    } else {
+      socket.emit("messages-upload", { vector: vector_mensajes})
+      
+    }
   })  
 
   socket.on('join-chat', data =>{
