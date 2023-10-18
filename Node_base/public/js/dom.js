@@ -303,7 +303,10 @@ function cambiarChat(boton, id_chat_2, usuario_upload) {
 
 socket.on("messages-upload", data => {//HACER FOR PARA LOS MENSAJES 
     const desplegar_el_chat = document.getElementById("tabla_mensajes_" + data.vector[0].id);
-    let listar_var_2 = '';
+    let listar_var_2 = `<div class="scroll-bg"> 
+                          <div class="scroll-div">
+                              <div class="scroll-object">
+                              `;
     console.log(data);
     if (data.vector.length == 1 && data.vector[0].mensaje == "") {
       listar_var_2 += `<p>No hay mensajes para cargar, inicia la conversacion!</p>`
@@ -339,13 +342,13 @@ socket.on("messages-upload", data => {//HACER FOR PARA LOS MENSAJES
     listar_var_2 += `<li class="bg-white mb-3">
                         <div class="form-outline">
                           <input type="text" id="mensaje${data.vector[0].id}" name="mensaje${data.vector[0].id}">
-                          <label class="form-label" for="textAreaExample2">Message</label>
+                          <label class="form-label" for="textAreaExample2">Message</label> <button type="button" class="btn btn-info btn-rounded float-end" onclick="emitMessage(${data.vector[0].id})">Send</button>
+                          </ul>
                         </div>
-                    </li>
-                    <h2> </h2>
-                    
-    <button type="button" class="btn btn-info btn-rounded float-end" onclick="emitMessage(${data.vector[0].id})">Send</button>
-    </ul>`
+                    </li>`
+    listar_var_2 += `</div>
+        </div>
+    </div>`
     desplegar_el_chat.innerHTML = listar_var_2;
   });
 

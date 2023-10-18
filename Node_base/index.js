@@ -207,7 +207,8 @@ io.on("connection", (socket) => {
     FROM MC_mensajes
     INNER JOIN MC_usuarioschats ON MC_mensajes.id = MC_usuarioschats.id
     INNER JOIN MC_contactos ON MC_mensajes.id_contacto = MC_contactos.id_contacto  
-    WHERE MC_mensajes.id = "${chat_upload.upload_chat}";`)
+    WHERE MC_mensajes.id = "${chat_upload.upload_chat}"
+    ORDER BY id_mensaje asc;`)
     if (vector_mensajes.length == 0) {
       //Crear nuevo chat, insert into
       let cargar_mensaje_vacio = await MySQL.realizarQuery(` INSERT INTO MC_mensajes (id_contacto, id, mensaje, fecha_hora)

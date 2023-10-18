@@ -230,3 +230,18 @@ select {
 }
 .gris{
   background-color: grey;
+}
+.scroll-bg{
+  width: 1080px;
+  padding: 10px;
+}
+.scroll-div{
+  width: 1080px;
+  height: 300px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.scroll-object{
+  font-family: cursive;
+  font-size: 15px;
+}
