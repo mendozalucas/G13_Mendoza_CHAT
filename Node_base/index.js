@@ -220,11 +220,19 @@ io.on("connection", (socket) => {
     SELECT MC_mensajes.mensaje, MC_contactos.user_contacto, MC_usuarioschats.id
     FROM MC_mensajes
     INNER JOIN MC_usuarioschats ON MC_mensajes.id = MC_usuarioschats.id
-    INNER JOIN MC_contactos ON MC_usuarioschats.id_contacto = MC_contactos.id_contacto  
+    INNER JOIN MC_contactos ON MC_mensajes.id_contacto = MC_contactos.id_contacto  
     WHERE MC_mensajes.id = "${chat_upload.upload_chat}";`)
     if (vector_mensajes.length == 0) {
       //Crear nuevo chat, insert into
-      socket.emit("messages-upload", { vector: vector_mensajes})
+      let cargar_mensaje_vacio = await MySQL.realizarQuery(` INSERT INTO MC_mensajes (id_contacto, id, mensaje, fecha_hora)
+      VALUES ("${req.session.Id}", "${chat_upload.upload_chat}", "", "")`)
+      let vector_de_ejemplo_mensajes = await MySQL.realizarQuery(`
+      SELECT MC_mensajes.mensaje, MC_contactos.user_contacto, MC_usuarioschats.id
+      FROM MC_mensajes
+      INNER JOIN MC_usuarioschats ON MC_mensajes.id = MC_usuarioschats.id
+      INNER JOIN MC_contactos ON MC_usuarioschats.id_contacto = MC_contactos.id_contacto  
+      WHERE MC_mensajes.id = "${chat_upload.upload_chat}";`)
+      socket.emit("messages-upload", { vector: vector_de_ejemplo_mensajes})
     } else {
       socket.emit("messages-upload", { vector: vector_mensajes})
       

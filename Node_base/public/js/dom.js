@@ -298,39 +298,40 @@ function cambiarChat(boton, id_chat_2, usuario_upload) {
     console.log(boton.id)
     socket.emit("join-chat", { idchat: boton.id});
     emitUpload(id_mensajes_display, usuario_upload)
-  }// usar for para cargar los mensajes
-
-  /*
-  for (let i = 0; i < data.length; i++) {
-    
-  }*/
-
+  }
 }   
 
 socket.on("messages-upload", data => {//HACER FOR PARA LOS MENSAJES 
     const desplegar_el_chat = document.getElementById("tabla_mensajes_" + data.vector[0].id);
     let listar_var_2 = '';
     console.log(data);
-    for (let i = 0; i < data.vector.length; i++) {
-      listar_var_2 += `<div class="card w-100">
-      <div class="card-header d-flex justify-content-between p-3">
-          <p class="fw-bold mb-0">${data.vector[i].user_contacto}</p>
-          <p class="text-muted small mb-0"><i class="far fa-clock"></i>Just now</p>
-      </div>
-      <div class="card-body">
-          <p class="mb-0">
-          ${data.vector[i].mensaje}
-          </p>
-      </div>
-    </div>
-    <div class="shadow p-3 mb-5 bg-white rounded">
-      <div id="allMessages">
-      </div>
-    </div>`
-    listar_var_2 += '</ul>'
+    if (data.vector.length == 1 && data.vector[0].mensaje == "") {
+      listar_var_2 += `<p>No hay mensajes para cargar, inicia la conversacion!</p>`
+    } else{
+      for (let i = 0; i < data.vector.length; i++) {
+        if (data.vector[i].mensaje == "") {
+          listar_var_2 += ""
+        } else {
+          listar_var_2 += `<div class="card w-100">
+          <div class="card-header d-flex justify-content-between p-3">
+              <p class="fw-bold mb-0">${data.vector[i].user_contacto}</p>
+              <p class="text-muted small mb-0"><i class="far fa-clock"></i>Just now</p>
+          </div>
+          <div class="card-body">
+              <p class="mb-0">
+              ${data.vector[i].mensaje}
+              </p>
+          </div>
+        </div>
+        <div class="shadow p-3 mb-5 bg-white rounded">
+          <div id="allMessages">
+          </div>
+        </div>`
+        listar_var_2 += '</ul>'
+        }
+      }
     }
     listar_var_2 += `
-    <h4>Chat</h4>
                            <ul class="list-unstyled"> 
                             <li id="tablamensajes${data.vector[0].id}" style="display: none">
                                                     
