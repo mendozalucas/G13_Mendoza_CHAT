@@ -232,12 +232,12 @@ select {
   background-color: grey;
 }
 .scroll-bg{
-  width: 1080px;
+  width: 90%;
   padding: 10px;
 }
 .scroll-div{
-  width: 1080px;
-  height: 300px;
+  width: 530px;
+  height: 830px;
   overflow: hidden;
   overflow-y: scroll;
 }

@@ -180,12 +180,12 @@ function cargarChats(usuarios_chats, usuario_) {
         </div>
       `
       }
-      listar_var_4 += `<div class="sidebar">
-                        <ul class="list-unstyled">
-                            <li id="tabla_mensajes_${usuarios_chats[u].id}" style="display: none">
-                                                    
-                            </li>
-                    </div>`
+      listar_var_4 += `
+          <div class="sidebar">
+            <ul class="list-unstyled">
+                <li id="tabla_mensajes_${usuarios_chats[u].id}" style="display: none">       
+                </li>
+        </div>`
     }
   }
   if (listar_var_4 == "") {
@@ -302,11 +302,12 @@ function cambiarChat(boton, id_chat_2, usuario_upload) {
 }   
 
 socket.on("messages-upload", data => {//HACER FOR PARA LOS MENSAJES 
-    const desplegar_el_chat = document.getElementById("tabla_mensajes_" + data.vector[0].id);
-    let listar_var_2 = `<div class="scroll-bg"> 
+    const desplegar_el_chat = document.getElementById("chat-screen");
+    let listar_var_2 = "";
+    /*let listar_var_2 = `<div class="scroll-bg"> 
                           <div class="scroll-div">
                               <div class="scroll-object">
-                              `;
+                              `;*/
     console.log(data);
     if (data.vector.length == 1 && data.vector[0].mensaje == "") {
       listar_var_2 += `<p>No hay mensajes para cargar, inicia la conversacion!</p>`
@@ -346,9 +347,9 @@ socket.on("messages-upload", data => {//HACER FOR PARA LOS MENSAJES
                           </ul>
                         </div>
                     </li>`
-    listar_var_2 += `</div>
+    /*listar_var_2 += `</div>
         </div>
-    </div>`
+    </div>`*/
     desplegar_el_chat.innerHTML = listar_var_2;
   });
 
