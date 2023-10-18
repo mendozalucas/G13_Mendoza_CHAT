@@ -179,20 +179,6 @@ app.put('/verify_Email', async function(req, res) {
         console.log("estoy en cuba");
         res.send({validar: true, respuesta: {verificacion}})   
     }
-      /*
-      let verificar_id_chat_2 = await MySQL.realizarQuery(`SELECT MC_usuarioschats.id FROM MC_usuarioschats INNER JOIN MC_chats ON MC_usuarioschats.id_chat = MC_chats.id_chat WHERE MC_usuarioschats.id_contacto = "${id_contacto_logueado[0].id_contacto}" AND MC_chats.nombre_receptor = "${verificarMail}"`)
-      //let verificar_id_chat = await MySQL.realizarQuery(`SELECT id_chat FROM MC_chats WHERE nombre_receptor = "${verificarMail}"`)
-      if(verificar_id_chat_2.length == 0) {
-        console.log("se hizo el push del chat a sql");
-        //push del chat con el nuevo mail
-        let chat_nuevo = await MySQL.realizarQuery(`INSERT INTO MC_chats (nombre_receptor) VALUES ("${verificarMail}"); `);
-        let verificar_id_chat_3 = await MySQL.realizarQuery(`SELECT id_chat FROM MC_chats WHERE nombre_receptor = "${verificarMail}"`)
-        let carga_chats_usuario = await MySQL.realizarQuery(`INSERT INTO MC_usuarioschats (id_contacto, id_chat) VALUES ("${id_contacto_logueado[0].id_contacto}", "${verificar_id_chat_3[0].id_chat}"); `);
-      } else if (verificar_id_chat_2.length > 0) {
-        console.log("no se hizo el push del chat a sql");
-        return 0;   
-      }
-      */ 
   }
   else{
       console.log("false_put");
@@ -217,7 +203,7 @@ io.on("connection", (socket) => {
   
   socket.on('upload-messages', async function(chat_upload) {
     let vector_mensajes = await MySQL.realizarQuery(`
-    SELECT MC_mensajes.mensaje, MC_contactos.user_contacto, MC_usuarioschats.id
+    SELECT MC_mensajes.mensaje, MC_contactos.user_contacto, MC_usuarioschats.id, MC_mensajes.fecha_hora
     FROM MC_mensajes
     INNER JOIN MC_usuarioschats ON MC_mensajes.id = MC_usuarioschats.id
     INNER JOIN MC_contactos ON MC_mensajes.id_contacto = MC_contactos.id_contacto  
@@ -242,50 +228,9 @@ io.on("connection", (socket) => {
   socket.on('join-chat', data =>{
     console.log('INCOMING IDCHAT', data);
     socket.join(data.idchat);
-    req.session.id_chat = data.idchat; // CUIDADO CON LOS OBJETOS
+    req.session.id_chat = data.idchat; 
   });
-  // VER SOCKET /////////////////////////////////////////
+
 });
-/*
-socket.on('guardar_mensaje', data => {
-
-}) 
-*/
-
-
-/*
-io.on("connection", async (socket) => {
-  const userId = await MySQL.realizarQuery(`SELECT id_contacto FROM MC_contactos WHERE user_contacto = "${req.session.Dato}"`);
-
-  socket.join(userId);
-
-  // and then later
-  io.to(userId).emit("server-message", { mensaje: data.mensaje, user: req.session.Dato });;
-});*/
-
 
 //setInterval(() => io.emit("server-message", {mensaje: "HOLI" }), 5000);
-/*
-app.post("/verify_Email", async function(req,res) {
-  
-  let verificarMail = req.body.verificar_mail
-  console.log("a", verificarMail)
-  let verificacion = await MySQL.realizarQuery(`SELECT user_contacto FROM MC_contactos WHERE user_contacto = "${verificarMail}"`)
-  let existe = false
-  console.log("b", verificacion)
-  for (let k = 0; k < verificacion.length; k++) {
-    if (verificarMail = verificacion[k].user_contacto ) {
-      existe = true
-    }
-  }
-  if (existe == false){
-
-    console.log("El usuario no existe")
-    res.render('chat', {aviso_chat: "El email que haz ingresado no existe"});
-    
-  }else if (existe == true){
-    console.log("El usuario existe!, puedes comenzar el chat")
-    res.render('chat', {aviso_chat: "El email que haz ingresado existe, falta el innerhtml para comenzar el chat"});
-  }
-
-}); */

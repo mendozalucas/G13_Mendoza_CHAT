@@ -315,7 +315,7 @@ socket.on("messages-upload", data => {//HACER FOR PARA LOS MENSAJES
           listar_var_2 += `<div class="card w-100">
           <div class="card-header d-flex justify-content-between p-3">
               <p class="fw-bold mb-0">${data.vector[i].user_contacto}</p>
-              <p class="text-muted small mb-0"><i class="far fa-clock"></i>Just now</p>
+              <p class="text-muted small mb-0"><i class="far fa-clock"></i>${data.vector[i].fecha_hora}</p>
           </div>
           <div class="card-body">
               <p class="mb-0">
@@ -364,8 +364,8 @@ function mandarMensaje(getMensaje, getUser, getChat) {
   const message_ = document.getElementById("tablamensajes" + getChat);
   let listar_var_3 = "";
   var today_2 = new Date();
-  let contHoras = today_2.getHours()
-  let contMinutos = today_2.getMinutes()
+  let contHoras = today_2.getHours();
+  let contMinutos = today_2.getMinutes();
   if(contHoras.toString().length == 1) {
     var hora = "0" + today_2.getHours();
   } else if (contHoras.toString().length == 2){
@@ -397,103 +397,3 @@ function mandarMensaje(getMensaje, getUser, getChat) {
   message_.innerHTML += listar_var_3
   message_.style.display = ""
 }
-/*
-function innerMessage() {
-  const message_ = document.getElementById("tabla_mensajes_2");
-  let mensaje_ = getMessageContent();
-  let listar_var_3 = "";
-  if(message_.style.display !== "none") {
-    message_.innerHTML = "";
-  }
-  else {
-    message_.style.display = ""
-  }
-  listar_var_3 = `   
-  <div class="card w-100">
-    <div class="card-header d-flex justify-content-between p-3">
-        <p class="fw-bold mb-0">Lara Croft</p>
-        <p class="text-muted small mb-0"><i class="far fa-clock"></i> 13 mins ago</p>
-    </div>
-    <div class="card-body">
-        <p class="mb-0">
-        ${mensaje_}
-        </p>
-    </div>
-  </div>
-  <div class="shadow p-3 mb-5 bg-white rounded">
-    <div id="allMessages">
-    </div>
-  </div>`
-  listar_var_3 += '</ul>'
-  message_.innerHTML = listar_var_3
-}*/
-/*
-async function adminUsuarioss(){
-  try {
-    const response = await fetch("/admin_usuarios", {
-      method: "PUT", // or 'POST'
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(),
-    });
-    
-    //En result obtengo la respuesta
-    const result = await response.json();
-    console.log("Success:", result);
-
-    if (result.validar == false) {
-      console.error("Error:", error);
-    } 
-    else {
-     
-      listarUsuarioss(result.respuesta.usuarios);
-      //document.getElementById("form_login").submit()
-    }
-
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
-
-function listarUsuarioss(usuarios) {
-  const tablaUsuarios = document.getElementById("tablaAdmin");
-  let listar_var = "";
-  if(tablaUsuarios.style.display !== "none") {
-    tablaUsuarios.innerHTML = "";
-  }
-  else {
-    tablaUsuarios.style.display = "";
-  }
-  listar_var += `
-      <div><br><h3> Administracion de Usuarios </h3><br></div>
-      <table class="table">
-          <thead class="thead-dark">
-              <tr></tr>
-              <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">USUARIO</th>
-                  <th scope="col">MAIL</th>
-                  <th scope="col"></th>
-                  <th scope="col"></th>
-              </tr>
-          </thead> 
-      <tbody>`
-  console.log(usuarios.length);  
-  for (let u = 0; u < usuarios.length; u++) {
-      listar_var +=` 
-          <tr>
-              <th scope="row">${usuarios[u].id}</th>
-              <td>${usuarios[u].usuario}</td>
-              <td>${usuarios[u].gmail}</td>
-              <td><button class="btn btn-danger" onclick="deleteUsuario(${usuarios[u].id})"><i class="fa fa-trash" ></i></button>
-              <td><button class="form-check-control btn btn-success" onclick="getPuntajes(${usuarios[u].id},'${usuarios[u].usuario}')">Puntajes</i></button>
-              </td>
-          </tr>`
-  }
-  listar_var +=`
-  </tbody>
-  </table>`
-  tablaUsuarios.innerHTML = listar_var;
-}
-*/
