@@ -18,12 +18,12 @@ function emitMessage(id) {
     let mensaje = el_mensaje;
     socket.emit("incoming-message", { mensaje: mensaje});
 }
-/*
-function emitUpload(id_chat_2, id_usuario_) {
+
+function emitUpload(id_chat_2, usuario_upload) {
     const id_chat_upload = id_chat_2;
-    const id_usuario_upload = id_usuario_;
-    socket.emit("upload-messages", {upload_chat: id_chat_upload, upload_usuario: id_usuario_upload})
-}*/
+    const usuario_upload_ = usuario_upload;
+    socket.emit("upload-messages", {upload_chat: id_chat_upload, upload_usuario: usuario_upload_})
+}
 /*
 io.on("connection", socket => {
 
